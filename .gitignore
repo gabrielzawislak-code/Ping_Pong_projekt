@@ -1,0 +1,9 @@
+*.log
+*.bin
+*.exe
+
+/runs/
+/usage_statistics_webtalk.*
+*.jou
+*.log
+.Xil/
