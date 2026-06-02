@@ -10,8 +10,13 @@
 
 
 sv work ../../rtl/vga_pkg.sv \
+        ../../rtl/vga_if.sv \
         ../../rtl/vga_timing.sv \
         ../../rtl/draw_bg.sv \
+        ../../rtl/draw_paddle_ball.sv \
         ../../rtl/top_vga.sv \
         ../common/tiff_writer.sv \
         top_vga_tb.sv
+
+verilog work ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
+        ../../fpga/rtl/clk_wiz_0.v

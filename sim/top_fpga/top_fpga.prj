@@ -18,4 +18,6 @@ sv work ../../rtl/vga_pkg.sv \
         top_fpga_tb.sv
 
 # compile glbl module - required for IP simulation
-verilog work ../common/glbl.v
+verilog work ../common/glbl.v \
+        ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
+        ../../fpga/rtl/clk_wiz_0.v

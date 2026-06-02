@@ -17,7 +17,7 @@ proc create_report { reportName command } {
   }
 }
 namespace eval ::optrace {
-  variable script "/home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.runs/impl_1/top_vga_basys3.tcl"
+  variable script "/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/impl_1/top_vga_basys3.tcl"
   variable category "vivado_impl"
 }
 
@@ -129,15 +129,17 @@ OPTRACE "create in-memory project" START { }
   set_param project.singleFileAddWarning.threshold 0
 OPTRACE "create in-memory project" END { }
 OPTRACE "set parameters" START { }
-  set_property webtalk.parent_dir /home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.cache/wt [current_project]
-  set_property parent.project_path /home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.xpr [current_project]
-  set_property ip_output_repo /home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.cache/ip [current_project]
+  set_property webtalk.parent_dir /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.cache/wt [current_project]
+  set_property parent.project_path /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.xpr [current_project]
+  set_property ip_output_repo /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
-  add_files -quiet /home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.runs/synth_1/top_vga_basys3.dcp
+  add_files -quiet /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.dcp
 OPTRACE "read constraints: implementation" START { }
-  read_xdc /home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/constraints/top_vga_basys3.xdc
+  read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/top_vga_basys3.xdc
+  read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0.xdc
+  read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0_late.xdc
 OPTRACE "read constraints: implementation" END { }
 OPTRACE "add files" END { }
 OPTRACE "link_design" START { }

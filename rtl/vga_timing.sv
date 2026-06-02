@@ -78,9 +78,9 @@ always_comb begin
 
 
     hblnk_nxt = (hcount_nxt >= HOR_BLNK_START) && (hcount_nxt < (HOR_BLNK_START + HOR_BLNK_TIME));
-    hsync_nxt = (hcount_nxt >= HOR_SYNC_START) && (hcount_nxt < (HOR_SYNC_START + HOR_SYNC_TIME));
+    hsync_nxt = ~((hcount_nxt >= HOR_SYNC_START) && (hcount_nxt < (HOR_SYNC_START + HOR_SYNC_TIME)));
     
     vblnk_nxt = (vcount_nxt >= VER_BLNK_START) && (vcount_nxt < (VER_BLNK_START + VER_BLNK_TIME));
-    vsync_nxt = (vcount_nxt >= VER_SYNC_START) && (vcount_nxt < (VER_SYNC_START + VER_SYNC_TIME));
+    vsync_nxt = ~((vcount_nxt >= VER_SYNC_START) && (vcount_nxt < (VER_SYNC_START + VER_SYNC_TIME)));
 end
 endmodule

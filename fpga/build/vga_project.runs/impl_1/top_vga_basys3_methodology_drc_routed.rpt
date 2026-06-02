@@ -1,8 +1,8 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-| Date         : Thu Mar 26 19:36:11 2026
-| Host         : cadence25 running 64-bit CentOS Linux release 7.9.2009 (Core)
+| Date         : Sun May 31 22:21:11 2026
+| Host         : cadence26 running 64-bit CentOS Linux release 7.9.2009 (Core)
 | Command      : report_methodology -file top_vga_basys3_methodology_drc_routed.rpt -pb top_vga_basys3_methodology_drc_routed.pb -rpx top_vga_basys3_methodology_drc_routed.rpx
 | Design       : top_vga_basys3
 | Device       : xc7a35tcpg236-1
@@ -23,104 +23,12 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 18
-+----------+----------+---------------------------+------------+
-| Rule     | Severity | Description               | Violations |
-+----------+----------+---------------------------+------------+
-| DPIR-1   | Warning  | Asynchronous driver check | 12         |
-| SYNTH-10 | Warning  | Wide multiplier           | 6          |
-+----------+----------+---------------------------+------------+
+             Violations found: 0
++------+----------+-------------+------------+
+| Rule | Severity | Description | Violations |
++------+----------+-------------+------------+
++------+----------+-------------+------------+
 
 2. REPORT DETAILS
 -----------------
-DPIR-1#1 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7 input pin u_top_vga/u_draw_bg/rgb_nxt7/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#2 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__0 input pin u_top_vga/u_draw_bg/rgb_nxt7__0/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#3 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__0 input pin u_top_vga/u_draw_bg/rgb_nxt7__0/B[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#4 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__1 input pin u_top_vga/u_draw_bg/rgb_nxt7__1/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#5 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__2 input pin u_top_vga/u_draw_bg/rgb_nxt7__2/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#6 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__2 input pin u_top_vga/u_draw_bg/rgb_nxt7__2/A[1] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#7 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__3 input pin u_top_vga/u_draw_bg/rgb_nxt7__3/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#8 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__3 input pin u_top_vga/u_draw_bg/rgb_nxt7__3/A[1] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#9 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__3 input pin u_top_vga/u_draw_bg/rgb_nxt7__3/B[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#10 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__3 input pin u_top_vga/u_draw_bg/rgb_nxt7__3/B[1] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#11 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__4 input pin u_top_vga/u_draw_bg/rgb_nxt7__4/A[0] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-DPIR-1#12 Warning
-Asynchronous driver check  
-DSP u_top_vga/u_draw_bg/rgb_nxt7__4 input pin u_top_vga/u_draw_bg/rgb_nxt7__4/A[1] is connected to registers with an asynchronous reset. This is preventing the possibility of merging these registers in to the DSP Block since the DSP block registers only possess synchronous reset capability.  It is suggested to recode or change these registers to remove the reset or use a synchronous reset to get the best optimization for performance, power and area.
-Related violations: <none>
-
-SYNTH-10#1 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7 of size 16x18, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
-SYNTH-10#2 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7__0 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
-SYNTH-10#3 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7__1 of size 18x16, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
-SYNTH-10#4 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7__2 of size 16x18, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
-SYNTH-10#5 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7__3 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
-SYNTH-10#6 Warning
-Wide multiplier  
-Detected multiplier at u_top_vga/u_draw_bg/rgb_nxt7__4 of size 18x16, it is decomposed from a wide multipler into 4 DSP blocks.
-Related violations: <none>
-
 

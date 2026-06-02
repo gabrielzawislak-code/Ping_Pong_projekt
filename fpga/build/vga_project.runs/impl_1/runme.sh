@@ -20,7 +20,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='/home/student/gzawislak/uec2-lab01/uec2-lab1-vga-gr4-mzybura-gzawislak/fpga/build/vga_project.runs/impl_1'
+HD_PWD='/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
