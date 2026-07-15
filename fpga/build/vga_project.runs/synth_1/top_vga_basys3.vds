@@ -2,13 +2,13 @@
 # Vivado v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Sun May 31 22:19:42 2026
-# Process ID: 14721
+# Start of session at: Wed Jul 15 18:46:56 2026
+# Process ID: 31777
 # Current directory: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1
 # Command line: vivado -log top_vga_basys3.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_vga_basys3.tcl
 # Log file: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.vds
 # Journal file: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/vivado.jou
-# Running On: cadence26, OS: Linux, CPU Frequency: 3320.703 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence26, OS: Linux, CPU Frequency: 3762.890 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 source top_vga_basys3.tcl -notrace
 Command: synth_design -top top_vga_basys3 -part xc7a35tcpg236-1
@@ -18,9 +18,9 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t
 INFO: [Device 21-403] Loading part xc7a35tcpg236-1
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 14958
+INFO: [Synth 8-7075] Helper process launched with PID 32012
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 4225 ; free virtual = 15885
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 188 ; free virtual = 12766
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'top_vga_basys3' [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
 INFO: [Synth 8-6157] synthesizing module 'ODDR' [/home_local/Xilinx/Vivado/2021.2/scripts/rt/data/unisim_comp.v:74749]
@@ -65,17 +65,31 @@ INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-
 INFO: [Synth 8-6155] done synthesizing module 'vga_if' (8#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_timing' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
 INFO: [Synth 8-6155] done synthesizing module 'vga_timing' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
-INFO: [Synth 8-6157] synthesizing module 'draw_bg' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'draw_bg' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'draw_bg' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:10]
-INFO: [Synth 8-6157] synthesizing module 'draw_paddle_ball' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_paddle_ball.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'draw_bg' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'game_fsm' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'game_fsm' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'draw_char' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'draw_paddle_ball' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_paddle_ball.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'delay' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
+	Parameter WIDTH bound to: 26 - type: integer 
+	Parameter CLK_DEL bound to: 3 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'delay' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'draw_char' (13#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'char_rom' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'char_rom' (14#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'font_rom' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'font_rom' (15#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv:10]
 WARNING: [Synth 8-3848] Net vga_time\.rgb in module/entity top_vga does not have driver. [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:11]
-INFO: [Synth 8-6155] done synthesizing module 'top_vga' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv:15]
-INFO: [Synth 8-6155] done synthesizing module 'top_vga_basys3' (13#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'top_vga' (16#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv:15]
+WARNING: [Synth 8-7071] port 'btn_D' of module 'top_vga' is unconnected for instance 'u_top_vga' [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:72]
+WARNING: [Synth 8-7023] instance 'u_top_vga' of module 'top_vga' has 8 connections declared, but only 7 given [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:72]
+INFO: [Synth 8-6155] done synthesizing module 'top_vga_basys3' (17#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
 WARNING: [Synth 8-7129] Port vga_in\.rgb[11] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[10] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[9] in module draw_bg is either unconnected or has no load
@@ -89,18 +103,18 @@ WARNING: [Synth 8-7129] Port vga_in\.rgb[2] in module draw_bg is either unconnec
 WARNING: [Synth 8-7129] Port vga_in\.rgb[1] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[0] in module draw_bg is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 3327 ; free virtual = 14988
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1198 ; free virtual = 13755
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 4186 ; free virtual = 15846
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1193 ; free virtual = 13750
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 4186 ; free virtual = 15846
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1193 ; free virtual = 13750
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 4225 ; free virtual = 15886
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1184 ; free virtual = 13741
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout1_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout2_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
@@ -122,30 +136,39 @@ Finished Parsing XDC File [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpg
 INFO: [Timing 38-2] Deriving generated clocks
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 4144 ; free virtual = 15805
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1076 ; free virtual = 13650
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 2 instances were transformed.
   BUFGCE => BUFGCTRL: 2 instances
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 4144 ; free virtual = 15805
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1076 ; free virtual = 13650
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4232 ; free virtual = 15893
+Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4232 ; free virtual = 15893
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4232 ; free virtual = 15893
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'game_fsm'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                ST_START |                               00 |                               00
+                 ST_WAIT |                               01 |                               01
+             ST_GAMEPLAY |                               10 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'game_fsm'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4220 ; free virtual = 15881
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:14 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1144 ; free virtual = 13722
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -153,15 +176,30 @@ Start RTL Component Statistics
 Detailed RTL Component Info : 
 +---Adders : 
 	   2 Input   11 Bit       Adders := 2     
+	   2 Input    8 Bit       Adders := 1     
+	   2 Input    6 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
 +---Registers : 
+	               26 Bit    Registers := 3     
 	               12 Bit    Registers := 2     
 	               11 Bit    Registers := 6     
-	                8 Bit    Registers := 2     
-	                1 Bit    Registers := 12    
+	                8 Bit    Registers := 3     
+	                7 Bit    Registers := 2     
+	                4 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 13    
++---ROMs : 
+	                    ROMs := 2     
 +---Muxes : 
 	   5 Input   12 Bit        Muxes := 1     
-	   2 Input   12 Bit        Muxes := 2     
+	   3 Input   12 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 3     
 	   2 Input   11 Bit        Muxes := 3     
+	   3 Input    7 Bit        Muxes := 1     
+	   3 Input    2 Bit        Muxes := 3     
+	   2 Input    2 Bit        Muxes := 3     
+	   3 Input    1 Bit        Muxes := 1     
+	   8 Input    1 Bit        Muxes := 1     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -178,26 +216,45 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_game_fsm/FSM_sequential_state_reg[1]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_game_fsm/FSM_sequential_state_reg[0]) is unused and will be removed from module top_vga_basys3.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4210 ; free virtual = 15875
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:17 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1127 ; free virtual = 13713
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+ROM: Preliminary Mapping Report
++---------------+-------------------------------------------+---------------+----------------+
+|Module Name    | RTL Object                                | Depth x Width | Implemented As | 
++---------------+-------------------------------------------+---------------+----------------+
+|top_vga_basys3 | u_top_vga/u_char_rom/char_code_reg        | 128x7         | Block RAM      | 
+|top_vga_basys3 | u_top_vga/u_font_rom/char_line_pixels_reg | 2048x8        | Block RAM      | 
++---------------+-------------------------------------------+---------------+----------------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4093 ; free virtual = 15758
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4093 ; free virtual = 15758
+Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_char_rom/char_code_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_font_rom/char_line_pixels_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished Technology Mapping : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 993 ; free virtual = 13587
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -215,37 +272,52 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished IO Insertion : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 994 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4091 ; free virtual = 15756
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4090 ; free virtual = 15756
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name    | RTL Name                                 | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|top_vga_basys3 | u_top_vga/u_draw_char/vga_out\.hsync_reg | 4      | 1     | YES          | NO                 | YES               | 1      | 0       | 
+|top_vga_basys3 | u_top_vga/u_draw_char/vga_out\.vsync_reg | 4      | 1     | YES          | NO                 | YES               | 1      | 0       | 
++---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -264,43 +336,45 @@ Report Cell Usage:
 |1     |BUFG       |     1|
 |2     |BUFGCE     |     2|
 |3     |BUFH       |     2|
-|4     |LUT1       |     1|
-|5     |LUT2       |     8|
-|6     |LUT3       |    16|
+|4     |LUT1       |     3|
+|5     |LUT2       |    20|
+|6     |LUT3       |     6|
 |7     |LUT4       |    12|
-|8     |LUT5       |    12|
+|8     |LUT5       |     9|
 |9     |LUT6       |    30|
 |10    |MMCME2_ADV |     1|
 |11    |ODDR       |     1|
-|12    |FDCE       |    36|
-|13    |FDRE       |    43|
-|14    |IBUF       |     2|
-|15    |OBUF       |    15|
+|12    |RAMB18E1   |     2|
+|14    |SRL16E     |     2|
+|15    |FDCE       |   107|
+|16    |FDRE       |    45|
+|17    |IBUF       |     2|
+|18    |OBUF       |    15|
 +------+-----------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4088 ; free virtual = 15754
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 4142 ; free virtual = 15807
-Synthesis Optimization Complete : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 4141 ; free virtual = 15806
+Synthesis finished with 0 errors, 0 critical warnings and 3 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:22 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1047 ; free virtual = 13642
+Synthesis Optimization Complete : Time (s): cpu = 00:00:20 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1047 ; free virtual = 13642
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 4133 ; free virtual = 15798
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1039 ; free virtual = 13635
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout1_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout2_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
-INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 6 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 4167 ; free virtual = 15833
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1065 ; free virtual = 13663
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 2 instances were transformed.
   BUFGCE => BUFGCTRL: 2 instances
 
-Synth Design complete, checksum: b05e3b54
+Synth Design complete, checksum: f01be247
 INFO: [Common 17-83] Releasing license: Synthesis
-55 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+69 Infos, 22 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:26 ; elapsed = 00:00:23 . Memory (MB): peak = 2781.730 ; gain = 64.031 ; free physical = 4370 ; free virtual = 16036
+synth_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2781.730 ; gain = 64.031 ; free physical = 1263 ; free virtual = 13861
 INFO: [Common 17-1381] The checkpoint '/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_vga_basys3_utilization_synth.rpt -pb top_vga_basys3_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sun May 31 22:20:16 2026...
+INFO: [Common 17-206] Exiting Vivado at Wed Jul 15 18:47:35 2026...

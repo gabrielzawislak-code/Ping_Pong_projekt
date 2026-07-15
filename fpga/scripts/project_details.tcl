@@ -37,9 +37,14 @@ set sv_files {
     ../rtl/vga_if.sv
     ../rtl/vga_timing.sv
     ../rtl/draw_bg.sv
-    ../rtl/draw_paddle_ball.sv
     ../rtl/top_vga.sv
+    ../rtl/char_rom.sv
+    ../rtl/delay.sv
+    ../rtl/draw_char.sv
+    ../rtl/font_rom.sv
+    ../rtl/game_fsm.sv
     rtl/top_vga_basys3.sv
+
 }
 
 #Specify Verilog design files location         -- EDIT

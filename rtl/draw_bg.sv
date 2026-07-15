@@ -1,12 +1,3 @@
-/**
- * Copyright (C) 2025  AGH University of Science and Technology
- * MTM UEC2
- * Author: Piotr Kaczmarczyk
- *
- * Description:
- * Draw background.
- */
-
 module draw_bg (
         input  logic clk,
         input  logic rst_n,
@@ -18,17 +9,8 @@ module draw_bg (
     timeprecision 1ps;
 
     import vga_pkg::*;
-
-
-    /**
-     * Local variables and signals
-     */
    
     vga_if vga_nxt();
-
-    /**
-     * Internal logic
-     */
 
     always_ff @(posedge clk) begin : bg_ff_blk
         if (!rst_n) begin
@@ -59,10 +41,10 @@ module draw_bg (
         vga_nxt.hsync = vga_in.hsync;
         vga_nxt.rgb = vga_in.rgb;
         
-        if (vga_in.vblnk || vga_in.hblnk) begin             // Blanking region:
-            vga_nxt.rgb= 12'h0_0_0;                    // - make it it black.
+        if (vga_in.vblnk || vga_in.hblnk) begin            
+            vga_nxt.rgb= 12'h0_0_0;                    
         
-        end else begin                              // Active region:
+        end else begin                              
             if(vga_in.hcount >= 507 && vga_in.hcount <= 517 && vga_in.vcount[4]) begin
                 vga_nxt.rgb= 12'hF_F_F;
             end

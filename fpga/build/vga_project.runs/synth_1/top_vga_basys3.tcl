@@ -84,9 +84,13 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib -sv {
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_pkg.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_paddle_ball.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv
