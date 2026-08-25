@@ -2,13 +2,13 @@
 # Vivado v2021.2 (64-bit)
 # SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
 # IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
-# Start of session at: Wed Jul 15 18:46:56 2026
-# Process ID: 31777
+# Start of session at: Mon Aug 10 14:09:43 2026
+# Process ID: 27735
 # Current directory: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1
 # Command line: vivado -log top_vga_basys3.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_vga_basys3.tcl
 # Log file: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.vds
 # Journal file: /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/vivado.jou
-# Running On: cadence26, OS: Linux, CPU Frequency: 3762.890 MHz, CPU Physical cores: 4, Host memory: 16720 MB
+# Running On: cadence24, OS: Linux, CPU Frequency: 3622.265 MHz, CPU Physical cores: 4, Host memory: 16720 MB
 #-----------------------------------------------------------
 source top_vga_basys3.tcl -notrace
 Command: synth_design -top top_vga_basys3 -part xc7a35tcpg236-1
@@ -18,9 +18,9 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t
 INFO: [Device 21-403] Loading part xc7a35tcpg236-1
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 32012
+INFO: [Synth 8-7075] Helper process launched with PID 27919
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 188 ; free virtual = 12766
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 8675 ; free virtual = 18633
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'top_vga_basys3' [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
 INFO: [Synth 8-6157] synthesizing module 'ODDR' [/home_local/Xilinx/Vivado/2021.2/scripts/rt/data/unisim_comp.v:74749]
@@ -56,40 +56,89 @@ INFO: [Synth 8-6157] synthesizing module 'BUFH' [/home_local/Xilinx/Vivado/2021.
 INFO: [Synth 8-6155] done synthesizing module 'BUFH' (6#1) [/home_local/Xilinx/Vivado/2021.2/scripts/rt/data/unisim_comp.v:1319]
 INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0_clk_wiz' (7#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/clk_wiz_0_clk_wiz.v:69]
 INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (8#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/clk_wiz_0.v:71]
+INFO: [Synth 8-6157] synthesizing module 'debounce' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/debounce.v:1]
+INFO: [Synth 8-226] default block is never used [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/debounce.v:40]
+INFO: [Synth 8-6155] done synthesizing module 'debounce' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/debounce.v:1]
 INFO: [Synth 8-6157] synthesizing module 'top_vga' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv:15]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (8#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (8#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (8#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6157] synthesizing module 'vga_timing' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
-INFO: [Synth 8-6155] done synthesizing module 'vga_timing' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
-INFO: [Synth 8-6157] synthesizing module 'draw_bg' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'draw_bg' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (9#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_timing' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'vga_timing' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'draw_bg' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (10#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'draw_bg' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'game_fsm' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'game_fsm' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:1]
+INFO: [Synth 8-226] default block is never used [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:41]
+INFO: [Synth 8-6155] done synthesizing module 'game_fsm' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'draw_char' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'vga_if' (11#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'delay' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
 	Parameter WIDTH bound to: 26 - type: integer 
 	Parameter CLK_DEL bound to: 3 - type: integer 
-INFO: [Synth 8-6155] done synthesizing module 'delay' (12#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
-INFO: [Synth 8-6155] done synthesizing module 'draw_char' (13#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'delay' (13#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'draw_char' (14#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'char_rom' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv:1]
-INFO: [Synth 8-6155] done synthesizing module 'char_rom' (14#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'char_rom' (15#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv:1]
 INFO: [Synth 8-6157] synthesizing module 'font_rom' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv:10]
-INFO: [Synth 8-6155] done synthesizing module 'font_rom' (15#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'font_rom' (16#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'counter_refresh_time' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/counter_refresh_time.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'counter_refresh_time' (17#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/counter_refresh_time.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'paddle_pos' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/paddle_pos.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'paddle_pos' (18#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/paddle_pos.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'ball_pos' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/ball_pos.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'ball_pos' (19#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/ball_pos.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'draw_score' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_score.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (19#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (19#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'delay__parameterized0' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
+	Parameter WIDTH bound to: 26 - type: integer 
+	Parameter CLK_DEL bound to: 2 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'delay__parameterized0' (19#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'draw_score' (20#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_score.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'draw_paddle_ball' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_paddle_ball.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'vga_if' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'vga_if' (20#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'draw_paddle_ball' (21#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_paddle_ball.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'send_bytes' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/send_bytes.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'send_bytes' (22#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/send_bytes.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'uart' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart.v:2]
+INFO: [Synth 8-6157] synthesizing module 'mod_m_counter' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/mod_m_counter.v:1]
+	Parameter N bound to: 8 - type: integer 
+	Parameter M bound to: 212 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'mod_m_counter' (23#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/mod_m_counter.v:1]
+INFO: [Synth 8-6157] synthesizing module 'uart_rx' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart_rx.v:2]
+	Parameter DBIT bound to: 8 - type: integer 
+	Parameter SB_TICK bound to: 16 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'uart_rx' (24#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart_rx.v:2]
+INFO: [Synth 8-6157] synthesizing module 'fifo' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/fifo.v:2]
+	Parameter B bound to: 8 - type: integer 
+	Parameter W bound to: 2 - type: integer 
+INFO: [Synth 8-155] case statement is not full and has no default [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/fifo.v:61]
+INFO: [Synth 8-6155] done synthesizing module 'fifo' (25#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/fifo.v:2]
+INFO: [Synth 8-6157] synthesizing module 'uart_tx' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart_tx.v:2]
+	Parameter DBIT bound to: 8 - type: integer 
+	Parameter SB_TICK bound to: 16 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'uart_tx' (26#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart_tx.v:2]
+INFO: [Synth 8-6155] done synthesizing module 'uart' (27#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart.v:2]
+INFO: [Synth 8-6157] synthesizing module 'receive_bytes' [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/receive_bytes.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'receive_bytes' (28#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/receive_bytes.sv:1]
 WARNING: [Synth 8-3848] Net vga_time\.rgb in module/entity top_vga does not have driver. [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv:11]
-INFO: [Synth 8-6155] done synthesizing module 'top_vga' (16#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv:15]
-WARNING: [Synth 8-7071] port 'btn_D' of module 'top_vga' is unconnected for instance 'u_top_vga' [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:72]
-WARNING: [Synth 8-7023] instance 'u_top_vga' of module 'top_vga' has 8 connections declared, but only 7 given [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:72]
-INFO: [Synth 8-6155] done synthesizing module 'top_vga_basys3' (17#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'top_vga' (29#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'top_vga_basys3' (30#1) [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv:15]
 WARNING: [Synth 8-7129] Port vga_in\.rgb[11] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[10] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[9] in module draw_bg is either unconnected or has no load
@@ -103,18 +152,18 @@ WARNING: [Synth 8-7129] Port vga_in\.rgb[2] in module draw_bg is either unconnec
 WARNING: [Synth 8-7129] Port vga_in\.rgb[1] in module draw_bg is either unconnected or has no load
 WARNING: [Synth 8-7129] Port vga_in\.rgb[0] in module draw_bg is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1198 ; free virtual = 13755
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 9647 ; free virtual = 19605
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1193 ; free virtual = 13750
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 9656 ; free virtual = 19615
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1193 ; free virtual = 13750
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 9656 ; free virtual = 19615
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 1184 ; free virtual = 13741
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2717.820 ; gain = 0.000 ; free physical = 9647 ; free virtual = 19606
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout1_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout2_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
@@ -136,70 +185,151 @@ Finished Parsing XDC File [/home/student/gzawislak/uec2-projekt/uec2-projekt/fpg
 INFO: [Timing 38-2] Deriving generated clocks
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1076 ; free virtual = 13650
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 9466 ; free virtual = 19425
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 2 instances were transformed.
   BUFGCE => BUFGCTRL: 2 instances
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1076 ; free virtual = 13650
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 9466 ; free virtual = 19425
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9625 ; free virtual = 19585
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9625 ; free virtual = 19585
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1161 ; free virtual = 13734
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9625 ; free virtual = 19585
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg_reg' in module 'debounce'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'game_fsm'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ball_pos'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'send_bytes'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg_reg' in module 'uart_rx'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg_reg' in module 'uart_tx'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    zero |                               00 |                               00
+                   wait1 |                               01 |                               11
+                     one |                               10 |                               10
+                   wait0 |                               11 |                               01
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg_reg' using encoding 'sequential' in module 'debounce'
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
                 ST_START |                               00 |                               00
                  ST_WAIT |                               01 |                               01
              ST_GAMEPLAY |                               10 |                               10
+                  ST_END |                               11 |                               11
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'game_fsm'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                ST_START |                                0 |                               00
+                 ST_MOVE |                                1 |                               01
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'ball_pos'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  BYTE_0 |                      00000000001 |                             0000
+                    WAIT |                      00000000010 |                             0001
+                  BYTE_1 |                      00000000100 |                             0010
+                  BYTE_2 |                      00000001000 |                             0011
+                  BYTE_3 |                      00000010000 |                             0100
+                  BYTE_4 |                      00000100000 |                             0101
+                  BYTE_5 |                      00001000000 |                             0110
+                  BYTE_6 |                      00010000000 |                             0111
+                  BYTE_7 |                      00100000000 |                             1000
+                  BYTE_8 |                      01000000000 |                             1001
+                  BYTE_9 |                      10000000000 |                             1010
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'send_bytes'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    idle |                               00 |                               00
+                   start |                               01 |                               01
+                    data |                               10 |                               10
+                    stop |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg_reg' using encoding 'sequential' in module 'uart_rx'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    idle |                               00 |                               00
+                   start |                               01 |                               01
+                    data |                               10 |                               10
+                    stop |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg_reg' using encoding 'sequential' in module 'uart_tx'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:14 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1144 ; free virtual = 13722
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:14 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9598 ; free virtual = 19559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input   11 Bit       Adders := 2     
-	   2 Input    8 Bit       Adders := 1     
-	   2 Input    6 Bit       Adders := 1     
-	   2 Input    4 Bit       Adders := 1     
+	   2 Input   21 Bit       Adders := 3     
+	   3 Input   13 Bit       Adders := 4     
+	   2 Input   12 Bit       Adders := 8     
+	   2 Input   11 Bit       Adders := 6     
+	   2 Input    8 Bit       Adders := 2     
+	   2 Input    6 Bit       Adders := 2     
+	   2 Input    4 Bit       Adders := 7     
+	   2 Input    3 Bit       Adders := 4     
+	   2 Input    2 Bit       Adders := 4     
 +---Registers : 
-	               26 Bit    Registers := 3     
-	               12 Bit    Registers := 2     
-	               11 Bit    Registers := 6     
-	                8 Bit    Registers := 3     
+	               26 Bit    Registers := 5     
+	               21 Bit    Registers := 3     
+	               12 Bit    Registers := 4     
+	               11 Bit    Registers := 17    
+	                8 Bit    Registers := 8     
 	                7 Bit    Registers := 2     
-	                4 Bit    Registers := 1     
-	                2 Bit    Registers := 1     
-	                1 Bit    Registers := 13    
+	                6 Bit    Registers := 1     
+	                4 Bit    Registers := 7     
+	                3 Bit    Registers := 6     
+	                1 Bit    Registers := 30    
++---RAMs : 
+	               32 Bit	(4 X 8 bit)          RAMs := 2     
 +---ROMs : 
-	                    ROMs := 2     
+	                    ROMs := 3     
 +---Muxes : 
+	   4 Input   21 Bit        Muxes := 3     
 	   5 Input   12 Bit        Muxes := 1     
-	   3 Input   12 Bit        Muxes := 1     
-	   2 Input   12 Bit        Muxes := 3     
-	   2 Input   11 Bit        Muxes := 3     
-	   3 Input    7 Bit        Muxes := 1     
-	   3 Input    2 Bit        Muxes := 3     
-	   2 Input    2 Bit        Muxes := 3     
-	   3 Input    1 Bit        Muxes := 1     
-	   8 Input    1 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 9     
+	   4 Input   12 Bit        Muxes := 1     
+	   2 Input   11 Bit        Muxes := 13    
+	  11 Input   11 Bit        Muxes := 1     
+	   7 Input   11 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 2     
+	   4 Input    8 Bit        Muxes := 2     
+	  11 Input    8 Bit        Muxes := 1     
+	   4 Input    7 Bit        Muxes := 1     
+	   2 Input    6 Bit        Muxes := 2     
+	   2 Input    4 Bit        Muxes := 13    
+	   4 Input    4 Bit        Muxes := 2     
+	   2 Input    3 Bit        Muxes := 6     
+	   4 Input    3 Bit        Muxes := 4     
+	   4 Input    2 Bit        Muxes := 6     
+	   2 Input    2 Bit        Muxes := 16    
+	   3 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 35    
+	   4 Input    1 Bit        Muxes := 33    
+	   8 Input    1 Bit        Muxes := 4     
+	   5 Input    1 Bit        Muxes := 1     
+	  11 Input    1 Bit        Muxes := 1     
+	   7 Input    1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -216,22 +346,48 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_game_fsm/FSM_sequential_state_reg[1]) is unused and will be removed from module top_vga_basys3.
-WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_game_fsm/FSM_sequential_state_reg[0]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-7129] Port vga_in\.rgb[11] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[10] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[9] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[8] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[7] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[6] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[5] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[4] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[3] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[2] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[1] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vga_in\.rgb[0] in module draw_bg is either unconnected or has no load
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[10]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[9]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[8]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[7]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[6]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[5]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[4]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[3]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[2]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[1]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_send_bytes/FSM_onehot_state_reg[0]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_uart/uart_rx_unit/FSM_sequential_state_reg_reg[1]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_uart/uart_rx_unit/FSM_sequential_state_reg_reg[0]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_uart/uart_tx_unit/FSM_sequential_state_reg_reg[1]) is unused and will be removed from module top_vga_basys3.
+WARNING: [Synth 8-3332] Sequential element (u_top_vga/u_uart/uart_tx_unit/FSM_sequential_state_reg_reg[0]) is unused and will be removed from module top_vga_basys3.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:17 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1127 ; free virtual = 13713
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9581 ; free virtual = 19547
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 
 ROM: Preliminary Mapping Report
-+---------------+-------------------------------------------+---------------+----------------+
-|Module Name    | RTL Object                                | Depth x Width | Implemented As | 
-+---------------+-------------------------------------------+---------------+----------------+
-|top_vga_basys3 | u_top_vga/u_char_rom/char_code_reg        | 128x7         | Block RAM      | 
-|top_vga_basys3 | u_top_vga/u_font_rom/char_line_pixels_reg | 2048x8        | Block RAM      | 
-+---------------+-------------------------------------------+---------------+----------------+
++------------+---------------------------------------+---------------+----------------+
+|Module Name | RTL Object                            | Depth x Width | Implemented As | 
++------------+---------------------------------------+---------------+----------------+
+|top_vga     | u_char_rom/char_code_reg              | 128x7         | Block RAM      | 
+|top_vga     | u_font_rom_char/char_line_pixels_reg  | 2048x8        | Block RAM      | 
+|top_vga     | u_font_rom_score/char_line_pixels_reg | 2048x8        | Block RAM      | 
++------------+---------------------------------------+---------------+----------------+
 
 ---------------------------------------------------------------------------------
 Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -240,21 +396,22 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:20 ; elapsed = 00:00:23 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9461 ; free virtual = 19427
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Timing Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:23 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9460 ; free virtual = 19426
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_char_rom/char_code_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
-INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_font_rom/char_line_pixels_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_font_rom_char/char_line_pixels_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_top_vga/u_font_rom_char/char_line_pixels_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:16 ; elapsed = 00:00:21 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 993 ; free virtual = 13587
+Finished Technology Mapping : Time (s): cpu = 00:00:20 ; elapsed = 00:00:23 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9446 ; free virtual = 19412
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -272,49 +429,50 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 994 ; free virtual = 13589
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19414
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 
 Static Shift Register Report:
-+---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
-|Module Name    | RTL Name                                 | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
-+---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
-|top_vga_basys3 | u_top_vga/u_draw_char/vga_out\.hsync_reg | 4      | 1     | YES          | NO                 | YES               | 1      | 0       | 
-|top_vga_basys3 | u_top_vga/u_draw_char/vga_out\.vsync_reg | 4      | 1     | YES          | NO                 | YES               | 1      | 0       | 
-+---------------+------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
++---------------+-------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name    | RTL Name                                        | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++---------------+-------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|top_vga_basys3 | u_top_vga/u_draw_char/vga_out\.hcount_reg[4]    | 4      | 2     | YES          | NO                 | YES               | 2      | 0       | 
+|top_vga_basys3 | u_top_vga/u_draw_paddle_ball/vga_out\.hsync_reg | 8      | 1     | YES          | NO                 | YES               | 1      | 0       | 
+|top_vga_basys3 | u_top_vga/u_draw_paddle_ball/vga_out\.vsync_reg | 8      | 1     | YES          | NO                 | YES               | 1      | 0       | 
++---------------+-------------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
 
 ---------------------------------------------------------------------------------
 Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -336,45 +494,47 @@ Report Cell Usage:
 |1     |BUFG       |     1|
 |2     |BUFGCE     |     2|
 |3     |BUFH       |     2|
-|4     |LUT1       |     3|
-|5     |LUT2       |    20|
-|6     |LUT3       |     6|
-|7     |LUT4       |    12|
-|8     |LUT5       |     9|
-|9     |LUT6       |    30|
-|10    |MMCME2_ADV |     1|
-|11    |ODDR       |     1|
-|12    |RAMB18E1   |     2|
-|14    |SRL16E     |     2|
-|15    |FDCE       |   107|
-|16    |FDRE       |    45|
-|17    |IBUF       |     2|
-|18    |OBUF       |    15|
+|4     |CARRY4     |    63|
+|5     |LUT1       |    85|
+|6     |LUT2       |   110|
+|7     |LUT3       |    39|
+|8     |LUT4       |   192|
+|9     |LUT5       |    41|
+|10    |LUT6       |   123|
+|11    |MMCME2_ADV |     1|
+|12    |ODDR       |     1|
+|13    |RAMB18E1   |     2|
+|15    |SRL16E     |     4|
+|16    |FDCE       |   328|
+|17    |FDPE       |    17|
+|18    |FDRE       |    69|
+|19    |IBUF       |     5|
+|20    |OBUF       |    15|
 +------+-----------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:19 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 995 ; free virtual = 13589
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9449 ; free virtual = 19415
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 3 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:22 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1047 ; free virtual = 13642
-Synthesis Optimization Complete : Time (s): cpu = 00:00:20 ; elapsed = 00:00:24 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 1047 ; free virtual = 13642
+Synthesis finished with 0 errors, 0 critical warnings and 28 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 9501 ; free virtual = 19466
+Synthesis Optimization Complete : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 2781.730 ; gain = 63.910 ; free physical = 9501 ; free virtual = 19466
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1039 ; free virtual = 13635
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 9596 ; free virtual = 19561
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout1_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'u_clk_wiz_0/inst/clkout2_buf' of type 'BUFGCE' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
-INFO: [Netlist 29-17] Analyzing 6 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 69 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 1065 ; free virtual = 13663
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2781.730 ; gain = 0.000 ; free physical = 9534 ; free virtual = 19500
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 2 instances were transformed.
   BUFGCE => BUFGCTRL: 2 instances
 
-Synth Design complete, checksum: f01be247
+Synth Design complete, checksum: 7ffd64e
 INFO: [Common 17-83] Releasing license: Synthesis
-69 Infos, 22 Warnings, 0 Critical Warnings and 0 Errors encountered.
+121 Infos, 45 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 2781.730 ; gain = 64.031 ; free physical = 1263 ; free virtual = 13861
+synth_design: Time (s): cpu = 00:00:32 ; elapsed = 00:00:30 . Memory (MB): peak = 2781.730 ; gain = 64.031 ; free physical = 9736 ; free virtual = 19701
 INFO: [Common 17-1381] The checkpoint '/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_vga_basys3_utilization_synth.rpt -pb top_vga_basys3_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Wed Jul 15 18:47:35 2026...
+INFO: [Common 17-206] Exiting Vivado at Mon Aug 10 14:10:24 2026...

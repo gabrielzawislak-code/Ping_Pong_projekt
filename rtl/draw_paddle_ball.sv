@@ -1,6 +1,10 @@
 module draw_paddle_ball(
     input logic clk,
     input logic rst_n,
+    input logic [10:0] paddle1_y,
+    input logic [10:0] paddle2_y,
+    input logic [10:0] ball_x,
+    input logic [10:0] ball_y,
     vga_if.in vga_in,
     vga_if.out vga_out
 );
@@ -37,11 +41,11 @@ always_comb begin
     vga_nxt.hsync = vga_in.hsync;
     vga_nxt.rgb = vga_in.rgb;
     
-    if((vga_in.hcount >= 30 && vga_in.hcount <= 46 && vga_in.vcount >= 50 && vga_in.vcount <= 150) || (vga_in.hcount >= 978 && vga_in.hcount <= 994 && vga_in.vcount >= 50 && vga_in.vcount <= 150)) begin
+    if(((vga_in.hcount >= 30) && (vga_in.hcount <= 46) && (vga_in.vcount >= paddle1_y) && (vga_in.vcount <= (paddle1_y + 100))) || ((vga_in.hcount >= 978) && (vga_in.hcount <= 994) && (vga_in.vcount >= paddle2_y) && (vga_in.vcount <= (paddle2_y + 100)))) begin
         vga_nxt.rgb = 12'h0FF;
     end
-    else if(vga_in.hcount >= 300 && vga_in.hcount <= 316 && vga_in.vcount >= 200 && vga_in.vcount <= 216) begin
-        vga_nxt.rgb = 12'h BF0;
+    else if((vga_in.hcount >= ball_x) && (vga_in.hcount <= (ball_x + 16)) && (vga_in.vcount >= ball_y) && (vga_in.vcount <= (ball_y + 16))) begin
+        vga_nxt.rgb = 12'hBF0;
     end
     else begin
         vga_nxt.rgb = vga_in.rgb;

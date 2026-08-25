@@ -38,9 +38,10 @@ module top_vga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst_n, btn_D;
+    logic clk, rst_n, btn_C;
     wire vs, hs;
     wire [3:0] r, g, b;
+    logic btn_up, btn_down;
 
 
     /**
@@ -60,7 +61,9 @@ module top_vga_tb;
     top_vga dut (
         .clk(clk),
         .rst_n(rst_n),
-        .btn_D(btn_D),
+        .btn_C(btn_C),
+        .btn_up(btn_up),
+        .btn_down(btn_down),
         .vs(vs),
         .hs(hs),
         .r(r),
@@ -86,7 +89,9 @@ module top_vga_tb;
      */
 
     initial begin
-        btn_D = 1'b1;
+        btn_C = 1'b1;
+        btn_up = 1'b0;
+        btn_down = 1'b0;
         rst_n = 1'b1;
         #(RST_START_TIME) rst_n = 1'b0;
         #(RST_ACTIVE_TIME) rst_n = 1'b1;
