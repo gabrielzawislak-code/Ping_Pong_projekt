@@ -99,6 +99,7 @@ read_verilog -library xil_defaultlib -sv {
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/receive_bytes.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/send_bytes.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/uart_sync.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv
   /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv

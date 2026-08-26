@@ -50,6 +50,7 @@ set sv_files {
     ../rtl/paddle_pos.sv
     ../rtl/receive_bytes.sv
     ../rtl/send_bytes.sv
+    ../rtl/uart_sync.sv
     rtl/top_vga_basys3.sv
 
 }

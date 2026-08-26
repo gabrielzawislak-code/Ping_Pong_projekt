@@ -1,13 +1,4 @@
 /**
- * San Jose State University
- * EE178 Lab #4
- * Author: prof. Eric Crabilla
- *
- * Modified by:
- * 2025  AGH University of Science and Technology
- * MTM UEC2
- * Piotr Kaczmarczyk
- *
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.
  */
@@ -18,6 +9,8 @@ module top_vga_basys3 (
         input  wire btnC,
         input wire btnU,
         input wire btnD,
+        input wire [1:1] JA,
+        output wire [0:0] JXADC, 
         output wire Vsync,
         output wire Hsync,
         output wire [3:0] vgaRed,
@@ -34,6 +27,7 @@ module top_vga_basys3 (
      */
 
     wire pclk;
+    wire tx_pin;
     wire pclk_mirror;
     wire btn_C, btn_U, btn_D;
 
@@ -50,7 +44,7 @@ module top_vga_basys3 (
 
     assign JA1 = pclk_mirror;
 
-
+    assign JXADC[0] = tx_pin;
 
     ODDR pclk_oddr (
         .Q(pclk_mirror),
@@ -98,11 +92,13 @@ module top_vga_basys3 (
     );
     
     top_vga u_top_vga (
-        .clk(pclk),
+        .clk_65Mhz(pclk),
         .rst_n(!btnL),
         .btn_C(btn_C),
         .btn_up(btn_U),
         .btn_down(btn_D),
+        .tx_pin(tx_pin),
+        .rx_pin(JA[1]),
         .r(vgaRed),
         .g(vgaGreen),
         .b(vgaBlue),

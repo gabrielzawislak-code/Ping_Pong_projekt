@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-| Date             : Mon Aug 10 14:11:23 2026
+| Date             : Wed Aug 26 16:19:50 2026
 | Host             : cadence24 running 64-bit CentOS Linux release 7.9.2009 (Core)
 | Command          : report_power -file top_vga_basys3_power_routed.rpt -pb top_vga_basys3_power_summary_routed.pb -rpx top_vga_basys3_power_routed.rpx
 | Design           : top_vga_basys3
@@ -49,23 +49,24 @@ Table of Contents
 1.1 On-Chip Components
 ----------------------
 
-+-------------------------+-----------+----------+-----------+-----------------+
-| On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
-+-------------------------+-----------+----------+-----------+-----------------+
-| Clocks                  |     0.002 |        5 |       --- |             --- |
-| Slice Logic             |    <0.001 |     1101 |       --- |             --- |
-|   LUT as Logic          |    <0.001 |      443 |     20800 |            2.13 |
-|   CARRY4                |    <0.001 |       63 |      8150 |            0.77 |
-|   Register              |    <0.001 |      409 |     41600 |            0.98 |
-|   LUT as Shift Register |    <0.001 |        4 |      9600 |            0.04 |
-|   Others                |     0.000 |       34 |       --- |             --- |
-| Signals                 |    <0.001 |      737 |       --- |             --- |
-| Block RAM               |     0.002 |        1 |        50 |            2.00 |
-| MMCM                    |     0.120 |        1 |         5 |           20.00 |
-| I/O                     |     0.010 |       20 |       106 |           18.87 |
-| Static Power            |     0.072 |          |           |                 |
-| Total                   |     0.208 |          |           |                 |
-+-------------------------+-----------+----------+-----------+-----------------+
++--------------------------+-----------+----------+-----------+-----------------+
+| On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
++--------------------------+-----------+----------+-----------+-----------------+
+| Clocks                   |     0.003 |        5 |       --- |             --- |
+| Slice Logic              |     0.001 |     1451 |       --- |             --- |
+|   LUT as Logic           |     0.001 |      585 |     20800 |            2.81 |
+|   Register               |    <0.001 |      531 |     41600 |            1.28 |
+|   CARRY4                 |    <0.001 |       63 |      8150 |            0.77 |
+|   LUT as Shift Register  |    <0.001 |        4 |      9600 |            0.04 |
+|   LUT as Distributed RAM |    <0.001 |       12 |      9600 |            0.13 |
+|   Others                 |     0.000 |       45 |       --- |             --- |
+| Signals                  |     0.001 |      969 |       --- |             --- |
+| Block RAM                |     0.002 |        1 |        50 |            2.00 |
+| MMCM                     |     0.120 |        1 |         5 |           20.00 |
+| I/O                      |     0.009 |       22 |       106 |           20.75 |
+| Static Power             |     0.072 |          |           |                 |
+| Total                    |     0.208 |          |           |                 |
++--------------------------+-----------+----------+-----------+-----------------+
 
 
 1.2 Power Supply Summary
@@ -74,9 +75,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.016 |       0.006 |      0.010 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.017 |       0.007 |      0.010 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.080 |       0.067 |      0.013 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.004 |       0.003 |      0.001 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.003 |       0.002 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -148,7 +149,7 @@ Table of Contents
 | top_vga_basys3      |     0.136 |
 |   u_clk_wiz_0       |     0.121 |
 |     inst            |     0.121 |
-|   u_top_vga         |     0.004 |
+|   u_top_vga         |     0.005 |
 |     u_font_rom_char |     0.001 |
 +---------------------+-----------+
 

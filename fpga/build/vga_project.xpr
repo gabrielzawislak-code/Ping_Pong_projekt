@@ -6,7 +6,7 @@
 <Project Version="7" Minor="56" Path="/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="dc09fdbd51de444f980e562c1f4b6774"/>
+    <Option Name="Id" Val="63f47cda68ef4521a3b575f8e0a3e984"/>
     <Option Name="Part" Val="xc7a35tcpg236-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -240,6 +240,13 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../../rtl/top_vga.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../rtl/uart_sync.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

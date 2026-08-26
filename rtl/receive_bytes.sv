@@ -79,12 +79,12 @@ module receive_bytes(
             
             
             BYTE_0: begin
-                if(data_in == 8'hF1) begin
+                if(data_in == 8'hA2) begin
                     rx_wait_nxt = 1;
                 end
                 
-                if(rx_empty == 0) begin
-                    if(data_in[7:4] == 4'hF) begin
+                if(!rx_empty) begin
+                    if(data_in[7:4] == 4'hA) begin
                         rd_en_nxt = 1;
                         counter_nxt = counter + 1;
                         state_nxt = WAIT;
