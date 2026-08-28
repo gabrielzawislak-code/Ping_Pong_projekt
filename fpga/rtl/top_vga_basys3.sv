@@ -10,7 +10,7 @@ module top_vga_basys3 (
         input wire btnU,
         input wire btnD,
         input wire [1:1] JA,
-        output wire [0:0] JXADC, 
+        output wire [0:0] JB, 
         output wire Vsync,
         output wire Hsync,
         output wire [3:0] vgaRed,
@@ -44,7 +44,7 @@ module top_vga_basys3 (
 
     assign JA1 = pclk_mirror;
 
-    assign JXADC[0] = tx_pin;
+    assign JB[0] = tx_pin;
 
     ODDR pclk_oddr (
         .Q(pclk_mirror),

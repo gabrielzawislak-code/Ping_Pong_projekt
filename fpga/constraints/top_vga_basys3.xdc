@@ -151,8 +151,8 @@ set_property PACKAGE_PIN L2 [get_ports {JA[1]}]
 
 ##Pmod Header JB
 ##Sch name = JB1
-#set_property PACKAGE_PIN A14 [get_ports {JB[0]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JB[0]}]
+set_property PACKAGE_PIN A14 [get_ports {JB[0]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {JB[0]}]
 ##Sch name = JB2
 #set_property PACKAGE_PIN A16 [get_ports {JB[1]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JB[1]}]
@@ -206,8 +206,8 @@ set_property PACKAGE_PIN L2 [get_ports {JA[1]}]
 
 ##Pmod Header JXADC
 ##Sch name = XA1_P
-set_property PACKAGE_PIN J3 [get_ports {JXADC[0]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[0]}]
+#set_property PACKAGE_PIN J3 [get_ports {JXADC[0]}]
+	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[0]}]
 ##Sch name = XA2_P
 #set_property PACKAGE_PIN L3 [get_ports {JXADC[1]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[1]}]
