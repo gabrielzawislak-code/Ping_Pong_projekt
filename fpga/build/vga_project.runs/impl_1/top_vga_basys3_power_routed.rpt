@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-| Date             : Fri Aug 28 18:37:05 2026
+| Date             : Fri Aug 28 19:38:55 2026
 | Host             : cadence24 running 64-bit CentOS Linux release 7.9.2009 (Core)
 | Command          : report_power -file top_vga_basys3_power_routed.rpt -pb top_vga_basys3_power_summary_routed.pb -rpx top_vga_basys3_power_routed.rpx
 | Design           : top_vga_basys3
@@ -60,7 +60,7 @@ Table of Contents
 |   LUT as Shift Register  |    <0.001 |        4 |      9600 |            0.04 |
 |   LUT as Distributed RAM |    <0.001 |       12 |      9600 |            0.13 |
 |   Others                 |     0.000 |       45 |       --- |             --- |
-| Signals                  |     0.001 |      970 |       --- |             --- |
+| Signals                  |     0.001 |      971 |       --- |             --- |
 | Block RAM                |     0.002 |        1 |        50 |            2.00 |
 | MMCM                     |     0.120 |        1 |         5 |           20.00 |
 | I/O                      |     0.009 |       22 |       106 |           20.75 |
