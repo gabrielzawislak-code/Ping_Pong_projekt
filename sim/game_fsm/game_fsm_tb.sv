@@ -4,7 +4,7 @@ module game_fsm_tb;
     timeprecision 1ps;
 
     logic clk, rst_n;
-    logic btnD;
+    logic btnC;
     logic rx_info;
     logic tick;
 
@@ -14,7 +14,7 @@ module game_fsm_tb;
     debounce u_debounce(
         .clk(clk),
         .rst_n(rst_n),
-        .sw(btnD),
+        .sw(btnC),
         .db_level(),
         .db_tick(tick)
     );
@@ -22,7 +22,7 @@ module game_fsm_tb;
     game_fsm u_game_fsm(
     .clk(clk),    
     .rst_n(rst_n),
-    .btn_D(tick),
+    .btn_C(tick),
     .rx_info(rx_info),
     .flag_char(flag_char),
     .tx_info(tx_info)
@@ -35,7 +35,7 @@ module game_fsm_tb;
 
     initial begin
         rx_info = 1'b0;
-        btnD = 1'b0;
+        btnC = 1'b0;
         rst_n = 1'b1;
         #(1000)
         rst_n = 1'b0;
@@ -44,7 +44,7 @@ module game_fsm_tb;
 
         #(10000)
 
-        btnD = 1'b1;
+        btnC = 1'b1;
         rx_info = 1'b1;
         wait(tick == 1);
         #(1000)

@@ -39,10 +39,17 @@ set sv_files {
     ../rtl/draw_bg.sv
     ../rtl/top_vga.sv
     ../rtl/char_rom.sv
+    ../rtl/counter_refresh_time.sv
     ../rtl/delay.sv
     ../rtl/draw_char.sv
+    ../rtl/draw_paddle_ball.sv
+    ../rtl/draw_score.sv
     ../rtl/font_rom.sv
     ../rtl/game_fsm.sv
+    ../rtl/paddle_pos.sv
+    ../rtl/receive_bytes.sv
+    ../rtl/send_bytes.sv
+    ../rtl/uart_sync.sv
     rtl/top_vga_basys3.sv
 
 }
@@ -51,7 +58,13 @@ set sv_files {
  set verilog_files {
     rtl/clk_wiz_0_clk_wiz.v
     rtl/clk_wiz_0.v
- }
+    ../rtl/debounce.v
+    ../rtl/fifo.v
+    ../rtl/mod_m_counter.v
+    ../rtl/uart_rx.v
+    ../rtl/uart_tx.v
+    ../rtl/uart.v
+}
 
 # Specify VHDL design files location            -- EDIT
 # set vhdl_files {

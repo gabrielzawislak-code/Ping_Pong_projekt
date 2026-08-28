@@ -39,7 +39,7 @@ module draw_bg (
         vga_nxt.hcount = vga_in.hcount;
         vga_nxt.hblnk = vga_in.hblnk;
         vga_nxt.hsync = vga_in.hsync;
-        vga_nxt.rgb = vga_in.rgb;
+        
         
         if (vga_in.vblnk || vga_in.hblnk) begin            
             vga_nxt.rgb= 12'h0_0_0;                    

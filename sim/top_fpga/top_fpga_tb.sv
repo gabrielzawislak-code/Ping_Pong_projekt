@@ -38,7 +38,7 @@ module top_fpga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst;
+    logic clk, rst, btnC, btnU, btnD;
     wire pclk;
     wire vs, hs;
     wire [3:0] r, g, b;
@@ -60,7 +60,10 @@ module top_fpga_tb;
 
     top_vga_basys3 dut (
         .clk(clk),
-        .btnC(rst),
+        .btnL(rst),
+        .btnC(btnC),
+        .btnD(btnD),
+        .btnU(btnU),
         .Vsync(vs),
         .Hsync(hs),
         .vgaRed(r),
@@ -91,6 +94,14 @@ module top_fpga_tb;
         #(RST_START_TIME) rst = 1'b1;
         #(RST_ACTIVE_TIME) rst = 1'b0;
 
+        btnC = 1'b1;
+        btnD = 1'b0;
+        btnU = 1'b0;
+
+        #10000000;
+
+        
+        
         $display("If simulation ends before the testbench");
         $display("completes, use the menu option to run all.");
         $display("Prepare to wait a long time...");

@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "/home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.runs/synth_1/top_vga_basys3.tcl"
+  variable script "/home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/build/vga_project.runs/synth_1/top_vga_basys3.tcl"
   variable category "vivado_synth"
 }
 
@@ -76,29 +76,42 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.cache/wt [current_project]
-set_property parent.project_path /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/build/vga_project.xpr [current_project]
+set_property webtalk.parent_dir /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/build/vga_project.cache/wt [current_project]
+set_property parent.project_path /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/build/vga_project.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib -sv {
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/char_rom.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/delay.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_pkg.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_bg.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/draw_char.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/font_rom.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/game_fsm.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/top_vga.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_if.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/rtl/vga_timing.sv
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/top_vga_basys3.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/char_rom.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/counter_refresh_time.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/delay.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/vga_pkg.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/draw_bg.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/draw_char.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/draw_paddle_ball.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/draw_score.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/font_rom.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/game_fsm.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/paddle_pos.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/receive_bytes.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/send_bytes.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/top_vga.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/uart_sync.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/vga_if.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/vga_timing.sv
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/rtl/top_vga_basys3.sv
 }
 read_verilog -library xil_defaultlib {
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/clk_wiz_0.v
-  /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/rtl/clk_wiz_0_clk_wiz.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/rtl/clk_wiz_0.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/rtl/clk_wiz_0_clk_wiz.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/debounce.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/fifo.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/mod_m_counter.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/uart.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/uart_rx.v
+  /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/rtl/uart_tx.v
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -109,14 +122,14 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/top_vga_basys3.xdc
-set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/top_vga_basys3.xdc]
+read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/top_vga_basys3.xdc
+set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/top_vga_basys3.xdc]
 
-read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0.xdc
-set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0.xdc]
+read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/clk_wiz_0.xdc
+set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/clk_wiz_0.xdc]
 
-read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0_late.xdc
-set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt/fpga/constraints/clk_wiz_0_late.xdc]
+read_xdc /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/clk_wiz_0_late.xdc
+set_property used_in_implementation false [get_files /home/student/gzawislak/uec2-projekt/uec2-projekt-player2/fpga/constraints/clk_wiz_0_late.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
