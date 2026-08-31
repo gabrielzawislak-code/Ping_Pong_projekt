@@ -1,1 +1,0 @@
-"work.vga_timing_tb" -snapshot "vga_timing_tb" -prj "/home/student/gzawislak/uec2-projekt/uec2-projekt/sim/vga_timing/vga_timing.prj" -timescale "1ns/1ps" -L "unisims_ver" -debug "typical" 
