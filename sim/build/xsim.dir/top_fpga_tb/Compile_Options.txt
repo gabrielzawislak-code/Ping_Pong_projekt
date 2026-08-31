@@ -1,1 +1,0 @@
-"work.top_fpga_tb" "work.glbl" -snapshot "top_fpga_tb" -prj "/home/student/gzawislak/uec2-projekt/uec2-projekt/sim/top_fpga/top_fpga.prj" -timescale "1ns/1ps" -L "unisims_ver" -standalone -runall 
