@@ -8,16 +8,13 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  *
+ * Modified by:
+ * Mateusz Zybura, Gabriel Zawiślak
+ *
  * Description:
- * Testbench for top_vga.
- * Thanks to the tiff_writer module, an expected image
- * produced by the project is exported to a tif file.
- * Since the vs signal is connected to the go input of
- * the tiff_writer, the first (top-left) pixel of the tif
- * will not correspond to the vga project (0,0) pixel.
- * The active image (not blanked space) in the tif file
- * will be shifted down by the number of lines equal to
- * the difference between VER_SYNC_START and VER_TOTAL_TIME.
+ * Testbench for top_vga (player_2). This board drives no monitor, so
+ * there is nothing to render/capture here - the test just wiggles the
+ * up/down buttons and lets the waveform viewer show tx_pin activity.
  */
 
 module top_vga_tb;
@@ -29,7 +26,7 @@ module top_vga_tb;
      *  Local parameters
      */
 
-    localparam CLK_PERIOD = 15.38;     // 40 MHz
+    localparam CLK_PERIOD = 15.38;     // 65 MHz
     localparam RST_START_TIME = 30;
     localparam RST_ACTIVE_TIME = 30;
 
@@ -38,10 +35,9 @@ module top_vga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst_n, btn_C;
-    wire vs, hs;
-    wire [3:0] r, g, b;
+    logic clk, rst_n;
     logic btn_up, btn_down;
+    wire tx_pin;
 
 
     /**
@@ -59,28 +55,11 @@ module top_vga_tb;
      */
 
     top_vga dut (
-        .clk(clk),
+        .clk_65Mhz(clk),
         .rst_n(rst_n),
-        .btn_C(btn_C),
         .btn_up(btn_up),
         .btn_down(btn_down),
-        .vs(vs),
-        .hs(hs),
-        .r(r),
-        .g(g),
-        .b(b)
-    );
-
-    tiff_writer #(
-        .XDIM(16'd1344),
-        .YDIM(16'd806),
-        .FILE_DIR("../../results")
-    ) u_tiff_writer (
-        .clk(clk),
-        .r({r,r}), // fabricate an 8-bit value
-        .g({g,g}), // fabricate an 8-bit value
-        .b({b,b}), // fabricate an 8-bit value
-        .go(vs)
+        .tx_pin(tx_pin)
     );
 
 
@@ -89,26 +68,17 @@ module top_vga_tb;
      */
 
     initial begin
-        btn_C = 1'b1;
         btn_up = 1'b0;
         btn_down = 1'b0;
         rst_n = 1'b1;
         #(RST_START_TIME) rst_n = 1'b0;
         #(RST_ACTIVE_TIME) rst_n = 1'b1;
-    
 
+        btn_up = 1'b1;
 
-        
-        $display("If simulation ends before the testbench");
-        $display("completes, use the menu option to run all.");
-        $display("Prepare to wait a long time...");
+        #1000000;
 
-        wait (vs == 1'b0);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-
-        // End the simulation.
-        $display("Simulation is over, check the waveforms.");
+        $display("Simulation is over, check tx_pin activity in the waveforms.");
         $finish;
     end
 

@@ -9,20 +9,19 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/vga_pkg.sv \
-        ../../rtl/vga_if.sv \
-        ../../rtl/vga_timing.sv \
-        ../../rtl/ball_pos.sv \
-        ../../rtl/char_rom.sv \
-        ../../rtl/counter_refresh_time.sv \
-        ../../rtl/draw_bg.sv \
-        ../../rtl/delay.sv \
-        ../../rtl/draw_char.sv \
-        ../../rtl/draw_paddle_ball.sv \
-        ../../rtl/draw_score.sv \
-        ../../rtl/font_rom.sv \
-        ../../rtl/game_fsm.sv \
-        ../../rtl/paddle_pos.sv \
+sv work ../../rtl/video/vga_pkg.sv \
+        ../../rtl/video/vga_if.sv \
+        ../../rtl/video/vga_timing.sv \
+        ../../rtl/video/char_rom.sv \
+        ../../rtl/game/counter_refresh_time.sv \
+        ../../rtl/video/draw_bg.sv \
+        ../../rtl/common/delay.sv \
+        ../../rtl/video/draw_char.sv \
+        ../../rtl/video/draw_paddle_ball.sv \
+        ../../rtl/video/draw_score.sv \
+        ../../rtl/video/font_rom.sv \
+        ../../rtl/game/game_fsm.sv \
+        ../../rtl/game/paddle_pos.sv \
         ../../rtl/top_vga.sv \
         ../common/tiff_writer.sv \
         top_vga_tb.sv

@@ -8,6 +8,9 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  *
+ * Modified by:
+ * Mateusz Zybura, Gabriel Zawiślak
+ *
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.
  */
@@ -15,16 +18,9 @@
 module top_vga_basys3 (
         input  wire clk,
         input  wire btnL,
-        input  wire btnC,
         input wire btnU,
         input wire btnD,
-        input logic [1:1] JA,
         output logic [0:0] JXADC,
-        output wire Vsync,
-        output wire Hsync,
-        output wire [3:0] vgaRed,
-        output wire [3:0] vgaGreen,
-        output wire [3:0] vgaBlue,
         output wire JA1
     );
 
@@ -38,14 +34,9 @@ module top_vga_basys3 (
     wire pclk;
     wire tx_pin;
     wire pclk_mirror;
-    wire btn_C, btn_U, btn_D;
-
-    (* KEEP = "TRUE" *)
-    (* ASYNC_REG = "TRUE" *)
-    logic [7:0] safe_start = 0;
-    // For details on synthesis attributes used above, see AMD Xilinx UG 901:
-    // https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis/Synthesis-Attributes
-
+    wire btn_U, btn_D;
+    wire clk_locked;
+    wire rst_n;
 
     /**
      * Signals assignments
@@ -70,24 +61,22 @@ module top_vga_basys3 (
         .clk,
         .clk_65Mhz(pclk),
         .clk_100Mhz(),
-        .locked()
+        .locked(clk_locked)
     );
 
     /**
      *  Project functional top module
      */
 
-    debounce u_debounce_btnC(
+    reset_ctrl u_reset_ctrl(
         .clk(pclk),
-        .rst_n(!btnL),
-        .sw(btnC),
-        .db_level(),
-        .db_tick(btn_C)
+        .rst_in_n(!btnL && clk_locked),
+        .rst_n(rst_n)
     );
 
     debounce u_debounce_btnU(
         .clk(pclk),
-        .rst_n(!btnL),
+        .rst_n(rst_n),
         .sw(btnU),
         .db_level(btn_U),
         .db_tick()
@@ -95,25 +84,18 @@ module top_vga_basys3 (
 
     debounce u_debounce_btnD(
         .clk(pclk),
-        .rst_n(!btnL),
+        .rst_n(rst_n),
         .sw(btnD),
         .db_level(btn_D),
         .db_tick()
     );
-    
+
     top_vga u_top_vga (
         .clk_65Mhz(pclk),
-        .rst_n(!btnL),
-        .btn_C(btn_C),
+        .rst_n(rst_n),
         .btn_up(btn_U),
         .btn_down(btn_D),
-        .rx_pin(JA[1]),
-        .tx_pin(tx_pin),
-        .r(vgaRed),
-        .g(vgaGreen),
-        .b(vgaBlue),
-        .hs(Hsync),
-        .vs(Vsync)
+        .tx_pin(tx_pin)
     );
 
 endmodule

@@ -1,3 +1,9 @@
+/**
+ * Author: Mateusz Zybura, Gabriel Zawiślak
+ *
+ * Description:
+ * Testbench for game_fsm.
+ */
 module game_fsm_tb;
 
     timeunit 1ns;
@@ -5,11 +11,11 @@ module game_fsm_tb;
 
     logic clk, rst_n;
     logic btnC;
-    logic rx_info;
+    logic [2:0] peer_state;
+    logic [3:0] score_1, score_2;
     logic tick;
 
-    wire tx_info;
-    wire [1:0] flag_char;
+    wire [2:0] flag_char;
 
     debounce u_debounce(
         .clk(clk),
@@ -20,12 +26,13 @@ module game_fsm_tb;
     );
 
     game_fsm u_game_fsm(
-    .clk(clk),    
+    .clk(clk),
     .rst_n(rst_n),
     .btn_C(tick),
-    .rx_info(rx_info),
-    .flag_char(flag_char),
-    .tx_info(tx_info)
+    .score_1(score_1),
+    .score_2(score_2),
+    .peer_state(peer_state),
+    .flag_char(flag_char)
     );
 
     initial begin
@@ -34,7 +41,9 @@ module game_fsm_tb;
     end
 
     initial begin
-        rx_info = 1'b0;
+        peer_state = 3'b001;
+        score_1 = '0;
+        score_2 = '0;
         btnC = 1'b0;
         rst_n = 1'b1;
         #(1000)
@@ -45,10 +54,9 @@ module game_fsm_tb;
         #(10000)
 
         btnC = 1'b1;
-        rx_info = 1'b1;
+        peer_state = 3'b011;
         wait(tick == 1);
         #(1000)
-        
 
 
         $finish;

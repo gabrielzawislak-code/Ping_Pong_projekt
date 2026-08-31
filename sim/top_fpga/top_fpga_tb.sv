@@ -8,16 +8,13 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  *
+ * Modified by:
+ * Mateusz Zybura, Gabriel Zawiślak
+ *
  * Description:
- * Testbench for top_fpga.
- * Thanks to the tiff_writer module, an expected image
- * produced by the project is exported to a tif file.
- * Since the vs signal is connected to the go input of
- * the tiff_writer, the first (top-left) pixel of the tif
- * will not correspond to the vga project (0,0) pixel.
- * The active image (not blanked space) in the tif file
- * will be shifted down by the number of lines equal to
- * the difference between VER_SYNC_START and VER_TOTAL_TIME.
+ * Testbench for top_fpga (player_2). This board drives no monitor, so
+ * there is nothing to render/capture here - the test just wiggles the
+ * up/down buttons and lets the waveform viewer show tx_pin activity.
  */
 
 module top_fpga_tb;
@@ -38,10 +35,8 @@ module top_fpga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst, btnC, btnU, btnD;
-    wire pclk;
-    wire vs, hs;
-    wire [3:0] r, g, b;
+    logic clk, rst, btnU, btnD;
+    wire tx_pin;
 
 
     /**
@@ -61,27 +56,10 @@ module top_fpga_tb;
     top_vga_basys3 dut (
         .clk(clk),
         .btnL(rst),
-        .btnC(btnC),
-        .btnD(btnD),
         .btnU(btnU),
-        .Vsync(vs),
-        .Hsync(hs),
-        .vgaRed(r),
-        .vgaGreen(g),
-        .vgaBlue(b),
-        .JA1(pclk)
-    );
-
-    tiff_writer #(
-        .XDIM(16'd1344),
-        .YDIM(16'd806),
-        .FILE_DIR("../../results")
-    ) u_tiff_writer (
-        .clk(pclk),
-        .r({r,r}), // fabricate an 8-bit value
-        .g({g,g}), // fabricate an 8-bit value
-        .b({b,b}), // fabricate an 8-bit value
-        .go(vs)
+        .btnD(btnD),
+        .JXADC(tx_pin),
+        .JA1()
     );
 
 
@@ -91,27 +69,22 @@ module top_fpga_tb;
 
     initial begin
         rst = 1'b0;
+        btnU = 1'b0;
+        btnD = 1'b0;
+
         #(RST_START_TIME) rst = 1'b1;
         #(RST_ACTIVE_TIME) rst = 1'b0;
 
-        btnC = 1'b1;
-        btnD = 1'b0;
+        btnU = 1'b1;
+
+        #1000000;
+
         btnU = 1'b0;
+        btnD = 1'b1;
 
-        #10000000;
+        #1000000;
 
-        
-        
-        $display("If simulation ends before the testbench");
-        $display("completes, use the menu option to run all.");
-        $display("Prepare to wait a long time...");
-
-        wait (vs == 1'b0);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-
-        // End the simulation.
-        $display("Simulation is over, check the waveforms.");
+        $display("Simulation is over, check tx_pin activity in the waveforms.");
         $finish;
     end
 
