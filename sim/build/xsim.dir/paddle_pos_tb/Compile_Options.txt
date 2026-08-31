@@ -1,0 +1,1 @@
+"work.paddle_pos_tb" -snapshot "paddle_pos_tb" -prj "/home/student/gzawislak/uec2-projekt/uec2-projekt/sim/paddle_pos/paddle_pos.prj" -timescale "1ns/1ps" -L "unisims_ver" -debug "typical" 
