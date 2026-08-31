@@ -8,8 +8,14 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  *
+ * Modified by:
+ * Mateusz Zybura, Gabriel Zawiślak
+ *
  * Description:
- * The project top module.
+ * The project top module. This board (MASTER) is the only one driving a
+ * monitor: it runs the whole game (both paddles, the ball and the score)
+ * and only receives the up/down button state of the other board over
+ * UART - it never transmits anything back.
  */
 
 module top_vga (
@@ -19,8 +25,8 @@ module top_vga (
         input logic btn_up,
         input logic btn_down,
         input logic rx_pin,
+        input logic [7:0] speed_pct,
         output logic vs,
-        output logic tx_pin,
         output logic hs,
         output logic [3:0] r,
         output logic [3:0] g,
@@ -35,6 +41,7 @@ module top_vga (
      */
     vga_if vga_time();
     vga_if vga_bg();
+    vga_if vga_hud();
     vga_if vga_char();
     vga_if vga_paddle();
     vga_if vga_score();
@@ -43,20 +50,21 @@ module top_vga (
     logic [6:0] char_code;
     logic [3:0] char_line;
     logic [7:0] char_line_pixels;
+    logic [7:0] char_line_hud;
+    logic [10:0] addr_hud;
     logic [2:0] flag_char;
     logic [10:0] paddle1_y, paddle2_y;
     logic ref_time;
+    logic ball_ref_time;
     logic [10:0] ball_x, ball_y;
     logic [3:0] score_1, score_2;
     logic [7:0] char_line_score;
     logic [10:0] addr_score;
-    logic wr, rd;
-    logic [7:0] data_out;
+    logic rd;
     logic [7:0] r_data;
     logic rx_empty;
-    logic [10:0] paddle_2_y_rec;
-    logic rx_info;
-    logic tx, rx;
+    logic btn_up_2, btn_down_2;
+    logic rx;
     /**
      * Signals assignments
      */
@@ -88,21 +96,43 @@ module top_vga (
         .vga_out(vga_bg)
     );
 
+    draw_hud u_draw_hud(
+        .clk(clk_65Mhz),
+        .rst_n,
+        .speed_pct(speed_pct),
+        .char_line_pixels(char_line_hud),
+        .addr(addr_hud),
+        .vga_in(vga_bg),
+        .vga_out(vga_hud)
+    );
+
+    font_rom u_font_rom_hud(
+        .clk(clk_65Mhz),
+        .addr(addr_hud),
+        .char_line_pixels(char_line_hud)
+    );
+
+    ball_speed_ctrl u_ball_speed_ctrl(
+        .clk(clk_65Mhz),
+        .rst_n,
+        .flag_char(flag_char),
+        .speed_pct(speed_pct),
+        .ball_ref_time(ball_ref_time)
+    );
+
     game_fsm u_game_fsm(
         .clk(clk_65Mhz),
         .rst_n,
         .btn_C(btn_C),
         .score_1(score_1),
         .score_2(score_2),
-        .flag_char(flag_char),
-        .rx_info(rx_info),
-        .tx_info()
+        .flag_char(flag_char)
     );
-    
+
     draw_char u_draw_char(
         .clk(clk_65Mhz),
         .rst_n,
-        .vga_in(vga_bg),
+        .vga_in(vga_hud),
         .flag_char(flag_char),
         .char_line_pixels(char_line_pixels),
         .char_xy(char_xy),
@@ -115,29 +145,30 @@ module top_vga (
         .char_xy(char_xy),
         .char_code(char_code)
     );
-    
+
     font_rom u_font_rom_char(
         .clk(clk_65Mhz),
         .addr({char_code, char_line}),
         .char_line_pixels(char_line_pixels)
     );
-    
+
     counter_refresh_time u_counter_refresh_time(
         .clk(clk_65Mhz),
         .rst_n,
         .ref_time(ref_time),
         .flag_char(flag_char)
     );
-    
-    
+
+
     paddle_pos u_paddle_pos(
         .clk(clk_65Mhz),
         .rst_n,
-        .btn_up,
-        .btn_down,
+        .btn_up_1(btn_up),
+        .btn_down_1(btn_down),
+        .btn_up_2(btn_up_2),
+        .btn_down_2(btn_down_2),
         .flag_char(flag_char),
         .ref_time(ref_time),
-        .paddle2_y_rec(paddle_2_y_rec),
         .paddle1_y(paddle1_y),
         .paddle2_y(paddle2_y)
     );
@@ -146,7 +177,7 @@ module top_vga (
         .clk(clk_65Mhz),
         .rst_n,
         .flag_char(flag_char),
-        .ref_time(ref_time),
+        .ref_time(ball_ref_time),
         .paddle_y_1(paddle1_y),
         .paddle_y_2(paddle2_y),
         .ball_x(ball_x),
@@ -154,7 +185,7 @@ module top_vga (
         .score_1(score_1),
         .score_2(score_2)
     );
-    
+
     draw_score u_draw_score(
         .clk(clk_65Mhz),
         .rst_n,
@@ -171,7 +202,7 @@ module top_vga (
         .addr(addr_score),
         .char_line_pixels(char_line_score)
     );
-    
+
     draw_paddle_ball u_draw_paddle_ball (
         .clk(clk_65Mhz),
         .rst_n,
@@ -183,30 +214,16 @@ module top_vga (
         .vga_out(vga_paddle)
     );
 
-    send_bytes u_send_bytes(
-        .clk(clk_65Mhz),
-        .rst_n,
-        .flag_char(flag_char),
-        .ref_time(ref_time),
-        .paddle_1_y(paddle1_y),
-        .ball_x(ball_x),
-        .ball_y(ball_y),
-        .score_1(score_1),
-        .score_2(score_2),
-        .wr_en(wr),
-        .data_out(data_out)
-    );
-
     uart u_uart(
         .clk(clk_65Mhz),
         .rst_n,
-        .wr_uart(wr),
-        .w_data(data_out),
+        .wr_uart(1'b0),
+        .w_data(8'h00),
         .rd_uart(rd),
         .rx(rx),
         .r_data(r_data),
         .rx_empty(rx_empty),
-        .tx(tx),
+        .tx(),
         .tx_full()
     );
 
@@ -216,15 +233,15 @@ module top_vga (
         .data_in(r_data),
         .rx_empty(rx_empty),
         .rd_en(rd),
-        .paddle_2_y(paddle_2_y_rec),
-        .rx_wait_info(rx_info)
+        .btn_up_2(btn_up_2),
+        .btn_down_2(btn_down_2)
     );
 
     uart_sync u_uart_sync(
         .clk(clk_65Mhz),
-        .tx(tx),
+        .tx(1'b1),
         .rx(rx_pin),
-        .tx_sync(tx_pin),
+        .tx_sync(),
         .rx_sync(rx)
     );
 

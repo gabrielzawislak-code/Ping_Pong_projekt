@@ -64,6 +64,7 @@ module top_fpga_tb;
         .btnC(btnC),
         .btnD(btnD),
         .btnU(btnU),
+        .speed_sw(5'd0),
         .Vsync(vs),
         .Hsync(hs),
         .vgaRed(r),

@@ -7,3 +7,12 @@
 *.jou
 *.log
 .Xil/
+
+# Vivado / DVT generated project data - not source, must be regenerated
+# locally via tools/generate_bitstream.sh / tools/run_simulation.sh.
+.dvt/
+xsim.dir/
+xvlog.pb
+fpga/build/
+sim/build/
+fpga/dfx_runtime.txt

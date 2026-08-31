@@ -64,6 +64,7 @@ module top_vga_tb;
         .btn_C(btn_C),
         .btn_up(btn_up),
         .btn_down(btn_down),
+        .speed_pct(8'd0),
         .vs(vs),
         .hs(hs),
         .r(r),

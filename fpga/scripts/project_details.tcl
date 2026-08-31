@@ -33,24 +33,27 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
-    ../rtl/vga_pkg.sv
-    ../rtl/vga_if.sv
-    ../rtl/vga_timing.sv
-    ../rtl/ball_pos.sv
-    ../rtl/draw_bg.sv
+    ../rtl/video/vga_pkg.sv
+    ../rtl/video/vga_if.sv
+    ../rtl/video/vga_timing.sv
+    ../rtl/game/ball_pos.sv
+    ../rtl/video/draw_bg.sv
     ../rtl/top_vga.sv
-    ../rtl/char_rom.sv
-    ../rtl/counter_refresh_time.sv
-    ../rtl/delay.sv
-    ../rtl/draw_char.sv
-    ../rtl/draw_paddle_ball.sv
-    ../rtl/draw_score.sv
-    ../rtl/font_rom.sv
-    ../rtl/game_fsm.sv
-    ../rtl/paddle_pos.sv
-    ../rtl/receive_bytes.sv
-    ../rtl/send_bytes.sv
-    ../rtl/uart_sync.sv
+    ../rtl/video/char_rom.sv
+    ../rtl/game/counter_refresh_time.sv
+    ../rtl/common/delay.sv
+    ../rtl/common/reset_ctrl.sv
+    ../rtl/video/draw_char.sv
+    ../rtl/video/draw_paddle_ball.sv
+    ../rtl/video/draw_score.sv
+    ../rtl/video/font_rom.sv
+    ../rtl/game/game_fsm.sv
+    ../rtl/game/paddle_pos.sv
+    ../rtl/game/ball_speed_ctrl.sv
+    ../rtl/video/draw_hud.sv
+    ../rtl/uart/receive_bytes.sv
+    ../rtl/uart/send_bytes.sv
+    ../rtl/uart/uart_sync.sv
     rtl/top_vga_basys3.sv
 
 }
@@ -59,12 +62,12 @@ set sv_files {
  set verilog_files {
     rtl/clk_wiz_0_clk_wiz.v
     rtl/clk_wiz_0.v
-    ../rtl/debounce.v
-    ../rtl/fifo.v
-    ../rtl/mod_m_counter.v
-    ../rtl/uart_rx.v
-    ../rtl/uart_tx.v
-    ../rtl/uart.v
+    ../rtl/common/debounce.v
+    ../rtl/uart/fifo.v
+    ../rtl/common/mod_m_counter.v
+    ../rtl/uart/uart_rx.v
+    ../rtl/uart/uart_tx.v
+    ../rtl/uart/uart.v
 }
 
 # Specify VHDL design files location            -- EDIT

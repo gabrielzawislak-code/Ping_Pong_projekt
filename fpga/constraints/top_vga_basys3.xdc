@@ -1,3 +1,5 @@
+## Modified by: Mateusz Zybura, Gabriel Zawiślak
+##
 ## This file is a general .xdc for the Basys3 rev B board
 ## To use it in a project:
 ## - uncomment the lines corresponding to used pins
@@ -31,16 +33,17 @@ set_property PACKAGE_PIN W5 [get_ports clk]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[9]}]
 #set_property PACKAGE_PIN T2 [get_ports {sw[10]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[10]}]
-#set_property PACKAGE_PIN R3 [get_ports {sw[11]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[11]}]
-#set_property PACKAGE_PIN W2 [get_ports {sw[12]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[12]}]
-#set_property PACKAGE_PIN U1 [get_ports {sw[13]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[13]}]
-#set_property PACKAGE_PIN T1 [get_ports {sw[14]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[14]}]
-#set_property PACKAGE_PIN R2 [get_ports {sw[15]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {sw[15]}]
+## Speed switches: SW11=+10%, SW12=+20%, SW13=+30%, SW14=+40%, SW15=+50%
+set_property PACKAGE_PIN R3 [get_ports {speed_sw[0]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {speed_sw[0]}]
+set_property PACKAGE_PIN W2 [get_ports {speed_sw[1]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {speed_sw[1]}]
+set_property PACKAGE_PIN U1 [get_ports {speed_sw[2]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {speed_sw[2]}]
+set_property PACKAGE_PIN T1 [get_ports {speed_sw[3]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {speed_sw[3]}]
+set_property PACKAGE_PIN R2 [get_ports {speed_sw[4]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {speed_sw[4]}]
 
 
 ## LEDs
@@ -151,8 +154,8 @@ set_property PACKAGE_PIN J1 [get_ports {JA1}]
 
 ##Pmod Header JB
 ##Sch name = JB1
-set_property PACKAGE_PIN A14 [get_ports {JB[0]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {JB[0]}]
+#set_property PACKAGE_PIN A14 [get_ports {JB[0]}]
+	#set_property IOSTANDARD LVCMOS33 [get_ports {JB[0]}]
 ##Sch name = JB2
 #set_property PACKAGE_PIN A16 [get_ports {JB[1]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JB[1]}]
