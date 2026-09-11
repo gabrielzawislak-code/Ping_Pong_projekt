@@ -1,0 +1,24 @@
+*.log
+*.bin
+*.exe
+
+/runs/
+/usage_statistics_webtalk.*
+*.jou
+*.log
+.Xil/
+
+# Vivado / DVT generated project data - not source, must be regenerated
+# locally via tools/generate_bitstream.sh / tools/run_simulation.sh.
+.dvt/
+xsim.dir/
+xvlog.pb
+fpga/build/
+sim/build/
+fpga/dfx_runtime.txt
+tools/build/
+
+# Synthesis/simulation outputs - regenerate with
+# tools/generate_bitstream.sh / tools/run_simulation.sh, do not commit.
+results/*.bit
+results/*.tif

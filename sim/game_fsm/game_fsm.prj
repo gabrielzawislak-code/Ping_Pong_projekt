@@ -1,0 +1,4 @@
+sv work ../../rtl/game/game_fsm.sv \
+    game_fsm_tb.sv
+
+verilog work ../../rtl/common/debounce.v

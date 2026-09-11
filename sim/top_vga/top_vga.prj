@@ -1,0 +1,43 @@
+# Copyright (C) 2025  AGH University of Science and Technology
+# MTM UEC2
+# Author: Piotr Kaczmarczyk
+#
+# Description:
+# List of files defining the modules used during the test.
+# Specify the file paths relative to THIS file.
+# For syntax detail see AMD Xilinx UG 900:
+# https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
+
+
+sv work ../../rtl/video/vga_pkg.sv \
+        ../../rtl/video/vga_if.sv \
+        ../../rtl/video/vga_timing.sv \
+        ../../rtl/game/ball_pos.sv \
+        ../../rtl/video/char_rom.sv \
+        ../../rtl/game/counter_refresh_time.sv \
+        ../../rtl/video/draw_bg.sv \
+        ../../rtl/common/delay.sv \
+        ../../rtl/video/draw_char.sv \
+        ../../rtl/video/draw_paddle_ball.sv \
+        ../../rtl/video/draw_score.sv \
+        ../../rtl/video/font_rom.sv \
+        ../../rtl/game/game_fsm.sv \
+        ../../rtl/game/paddle_mover.sv \
+        ../../rtl/game/ball_speed_ctrl.sv \
+        ../../rtl/video/draw_hud.sv \
+        ../../rtl/uart/uart_sync.sv \
+        ../../rtl/uart/send_state_frame.sv \
+        ../../rtl/uart/receive_state_frame.sv \
+        ../../rtl/uart/send_paddle_frame.sv \
+        ../../rtl/uart/receive_paddle_frame.sv \
+        ../../rtl/top_vga.sv \
+        ../common/tiff_writer.sv \
+        top_vga_tb.sv
+
+verilog work ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
+        ../../fpga/rtl/clk_wiz_0.v \
+        ../../rtl/common/mod_m_counter.v \
+        ../../rtl/uart/fifo.v \
+        ../../rtl/uart/uart_rx.v \
+        ../../rtl/uart/uart_tx.v \
+        ../../rtl/uart/uart.v
