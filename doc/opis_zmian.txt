@@ -1,7 +1,5 @@
 Ping-Pong na Basys3 - opis zmian architektonicznych
-=====================================================
 Autorzy: Mateusz Zybura, Gabriel Zawiślak
-Dotyczy uwag: Piotr Kaczmarczyk (recenzja projektu, wrzesień 2026)
 
 
 1. ZGŁOSZONE PROBLEMY
@@ -75,7 +73,7 @@ master_new / player_2_new.
 
 4. WERYFIKACJA
 ----------------
-Projekt zbudowany w Vivado 2025.2 (part xc7a35tcpg236-1):
+Projekt zbudowany w Vivado 2025.2:
   - synteza i implementacja zakończone bez błędów, bitstream
     wygenerowany poprawnie,
   - timing spięty (dodatni WNS, 0 failing endpoints),

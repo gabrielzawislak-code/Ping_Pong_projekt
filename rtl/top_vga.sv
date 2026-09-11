@@ -192,7 +192,6 @@ module top_vga (
     counter_refresh_time u_counter_refresh_time(
         .clk(clk_65Mhz),
         .rst_n,
-        .flag_char(flag_char),
         .ref_time(ref_time)
     );
 

@@ -2,19 +2,30 @@
  * Author: Mateusz Zybura, Gabriel Zawiślak
  *
  * Description:
- * Periodic timer producing a single-cycle ref_time pulse used to pace
- * paddle/ball movement updates while the game is in the PLAYING state
- * (flag_char == 3'b011).
+ * Free-running periodic timer producing a single-cycle ref_time pulse at
+ * ~60 Hz. Used to pace paddle movement (paddle_mover) and, on both
+ * boards, to pace the UART frame senders (send_state_frame /
+ * send_paddle_frame).
+ *
+ * ref_time ticks unconditionally, regardless of flag_char - it used to
+ * be gated to only tick during PLAYING, but paddle_mover and ball_pos
+ * already re-check flag_char==PLAYING internally before acting on a
+ * tick, so gating it here again was redundant AND harmful: it silently
+ * froze the UART senders during IDLE/READY (they use the same ref_time
+ * to pace frame transmission), which meant a fresh flag_char/paddle/ball
+ * update could never reach the peer board outside PLAYING - deadlocking
+ * the READY -> PLAYING handshake and freezing the peer's view of the
+ * game. Keeping the tick free-running fixes that without changing any
+ * gameplay behaviour.
  */
 module counter_refresh_time(
     input logic clk,
     input logic rst_n,
-    input logic [2:0] flag_char,
     output logic ref_time
 );
 
     localparam bit [21:0] SYNC_TIME = 1_083_659;
-    
+
     logic [21:0] timer, timer_nxt;
     logic ref_time_nxt;
 
@@ -31,17 +42,14 @@ module counter_refresh_time(
 
     always_comb begin
         timer_nxt = timer;
-        ref_time_nxt = ref_time;
+        ref_time_nxt = 1'b0;
 
-        if(flag_char == 3'b011) begin
-            if(timer >= SYNC_TIME) begin
-                timer_nxt = '0;
-                ref_time_nxt = 1'b1;
-            end
-            else begin
-                timer_nxt = timer + 1;
-                ref_time_nxt = 1'b0;
-            end
+        if(timer >= SYNC_TIME) begin
+            timer_nxt = '0;
+            ref_time_nxt = 1'b1;
+        end
+        else begin
+            timer_nxt = timer + 1;
         end
     end
 
