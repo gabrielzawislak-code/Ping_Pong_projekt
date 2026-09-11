@@ -1,0 +1,88 @@
+Ping-Pong na Basys3 - opis zmian architektonicznych
+=====================================================
+Autorzy: Mateusz Zybura, Gabriel Zawiślak
+Dotyczy uwag: Piotr Kaczmarczyk (recenzja projektu, wrzesień 2026)
+
+
+1. ZGŁOSZONE PROBLEMY
+----------------------
+a) Projekt był podzielony na dwa osobne bitstreamy (gałęzie master_new i
+   player_2_new), z których tylko jeden (master_new) generował obraz VGA
+   i prowadził rozgrywkę - druga płytka była zredukowana do kontrolera
+   przycisków bez własnego ekranu.
+b) Komunikacja UART była jednokierunkowa: płytka master_new miała tylko
+   wejście RX, bez nadajnika TX.
+c) Dwie gałęzie w repozytorium oznaczały, że po sklonowaniu i zbudowaniu
+   gałęzi domyślnej powstawała tylko jedna z dwóch konfiguracji.
+
+
+2. WPROWADZONA ZMIANA ARCHITEKTURY
+------------------------------------
+Zamiast dwóch różnych projektów - jeden, identyczny bitstream wgrywany
+na OBIE płytki Basys3. Rolę (HOST / Gracz 1 albo CLIENT / Gracz 2)
+wybiera fizyczny przełącznik sw_role, odczytywany w locie:
+
+  - HOST (sw_role = 0): jedyna płytka licząca fizykę piłki i wynik
+    (moduł ball_pos). Wysyła do drugiej płytki pełny stan gry.
+  - CLIENT (sw_role = 1): nie liczy piłki ani wyniku, mirroruje je
+    z ramki otrzymanej od HOSTa.
+
+Obie płytki, niezależnie od roli:
+  - mają aktywne wyjście VGA i renderują obraz lokalnie (własny monitor,
+    własna kopia rozgrywki),
+  - liczą lokalnie WYŁĄCZNIE własną paletkę (moduł paddle_mover) na
+    podstawie własnych przycisków - zero opóźnienia w sterowaniu,
+  - prowadzą lokalny automat stanu gry (game_fsm) zsynchronizowany
+    z drugą płytką przez wymianę stanu (IDLE/READY/PLAYING/END) - obie
+    strony muszą wcisnąć start (btnC), by rozpocząć rozgrywkę.
+
+Komunikacja UART jest teraz pełnodupleksowa, dwiema oddzielnymi ramkami
+w obu kierunkach jednocześnie:
+
+  HOST -> CLIENT (12 B, co ~1/60 s): pozycje obu paletek, pozycja
+    piłki, wynik obu graczy, stan gry.
+  CLIENT -> HOST (4 B, co ~1/60 s): własna (lokalnie policzona) pozycja
+    paletki CLIENTa oraz jego lokalny stan gry.
+
+Piny: JC[0] = RX, JXADC[0] = TX - identycznie na obu płytkach. Płytki
+łączy się na krzyż (TX jednej do RX drugiej) plus wspólna masa (GND).
+
+
+3. ZMIANY W KODZIE (repozytorium scalone do jednej gałęzi)
+-------------------------------------------------------------
+Nowe/zmienione moduły:
+  - rtl/game/paddle_mover.sv      (nowy) - pozycja jednej, lokalnej
+    paletki; zastępuje obie wcześniejsze wersje paddle_pos.sv.
+  - rtl/game/game_fsm.sv          - wersja z wejściem peer_state,
+    używana teraz na obu płytkach (wcześniej istniała, ale nieużywana).
+  - rtl/uart/send_state_frame.sv / receive_state_frame.sv
+    (przemianowane z send_bytes.sv / receive_bytes.sv, logika bez
+    zmian) - kierunek HOST -> CLIENT.
+  - rtl/uart/send_paddle_frame.sv / receive_paddle_frame.sv (nowe) -
+    kierunek CLIENT -> HOST.
+  - rtl/top_vga.sv oraz fpga/rtl/top_vga_basys3.sv - przepisane wokół
+    sygnału roli is_host (z podwójnie synchronizowanego przełącznika
+    sw_role), multiplekseru danych paletka/piłka/wynik oraz
+    multipleksera ramek TX/RX.
+  - fpga/constraints/top_vga_basys3.xdc - dodany pin sw_role (V17),
+    włączony pin TX JXADC[0] (J3); VGA i btnC aktywne na stałe.
+  - Zaktualizowane pliki .prj i testbenche w sim/ pod nowe/przemianowane
+    moduły i porty.
+
+Repozytorium: jeden katalog projektu, jedna gałąź główna (main) zamiast
+master_new / player_2_new.
+
+
+4. WERYFIKACJA
+----------------
+Projekt zbudowany w Vivado 2025.2 (part xc7a35tcpg236-1):
+  - synteza i implementacja zakończone bez błędów, bitstream
+    wygenerowany poprawnie,
+  - timing spięty (dodatni WNS, 0 failing endpoints),
+  - potwierdzone przypięcie pinów sw_role/JC[0]/JXADC[0] po
+    implementacji (get_property PACKAGE_PIN),
+  - wszystkie zgłoszone przez Vivado warningi (synteza, implementacja,
+    DRC) sprawdzone i niezwiązane z wprowadzonymi zmianami - dotyczą
+    ogólnego szumu narzędzia (skan katalogu płytek referencyjnych) oraz
+    typowego, nieszkodliwego advisory o BRAM/async reset w
+    niezmienionym module font_rom.sv.
