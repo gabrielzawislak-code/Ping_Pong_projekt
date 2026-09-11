@@ -8,6 +8,15 @@
  * the CLIENT never computes the ball or the score itself, it only
  * mirrors what the HOST reports (its own paddle is still computed
  * locally by paddle_mover, for zero-latency response).
+ *
+ * BYTE_0 both examines AND (on any outcome) pops the byte it is looking
+ * at, so header-hunting always makes forward progress one byte at a
+ * time and never re-examines a byte it has already rejected. Every
+ * other byte read goes through the WAIT state, which exists purely to
+ * let the one-cycle FIFO read latency settle (rd asserted this cycle ->
+ * the new byte is only visible on r_data the cycle after) before the
+ * next BYTE_x state samples data_in - skipping that settle cycle would
+ * make every field read the previous byte instead of its own.
  */
 module receive_state_frame(
     input logic clk,
@@ -38,9 +47,8 @@ module receive_state_frame(
     logic [3:0] counter, counter_nxt;
 
     enum logic [3:0] {
-        IDLE,
-        WAIT,
         BYTE_0,
+        WAIT,
         BYTE_1,
         BYTE_2,
         BYTE_3,
@@ -72,7 +80,7 @@ module receive_state_frame(
            flag_char <= FLAG_IDLE;
            rd_en <= 0;
            counter <= '0;
-           state <= IDLE;
+           state <= BYTE_0;
         end
         else begin
             paddle_1_y <= paddle_1_y_nxt;
@@ -114,23 +122,29 @@ module receive_state_frame(
         counter_nxt = counter;
 
         case(state)
-            IDLE: begin
-                counter_nxt = '0;
-
+            BYTE_0: begin
                 if(!rx_empty) begin
                     rd_en_nxt = 1;
-                    state_nxt = WAIT;
+
+                    if(data_in[7:4] == 4'hA) begin
+                        flag_char_nxt = data_in[2:0];
+                        counter_nxt = 1;
+                        state_nxt = WAIT;
+                    end
+                    else begin
+                        // Not a header byte - it has still been popped
+                        // above, so the next cycle examines a fresh
+                        // byte instead of re-checking this same one.
+                        state_nxt = BYTE_0;
+                    end
                 end
                 else begin
-                    state_nxt = IDLE;
+                    state_nxt = BYTE_0;
                 end
             end
 
             WAIT: begin
-                if(counter == 0) begin
-                    state_nxt = BYTE_0;
-                end
-                else if(counter == 1) begin
+                if(counter == 1) begin
                     state_nxt = BYTE_1;
                 end
                 else if(counter == 2) begin
@@ -162,24 +176,6 @@ module receive_state_frame(
                 end
                 else if(counter == 11) begin
                     state_nxt = BYTE_11;
-                end
-                else begin
-                    state_nxt = IDLE;
-                end
-            end
-
-
-            BYTE_0: begin
-                if(!rx_empty) begin
-                    if(data_in[7:4] == 4'hA) begin
-                        flag_char_nxt = data_in[2:0];
-                        rd_en_nxt = 1;
-                        counter_nxt = counter + 1;
-                        state_nxt = WAIT;
-                    end
-                    else begin
-                        state_nxt = IDLE;
-                    end
                 end
                 else begin
                     state_nxt = BYTE_0;
@@ -317,19 +313,26 @@ module receive_state_frame(
             end
 
             BYTE_11: begin
-                if(data_in == 8'hAA) begin
-                    paddle_1_y_nxt = temp_paddle_1;
-                    paddle_2_y_nxt = temp_paddle_2;
-                    ball_x_nxt = temp_ball_x;
-                    ball_y_nxt = temp_ball_y;
-                    score_1_nxt = temp_score_1;
-                    score_2_nxt = temp_score_2;
+                if(!rx_empty) begin
+                    rd_en_nxt = 1;
+
+                    if(data_in == 8'hAA) begin
+                        paddle_1_y_nxt = temp_paddle_1;
+                        paddle_2_y_nxt = temp_paddle_2;
+                        ball_x_nxt = temp_ball_x;
+                        ball_y_nxt = temp_ball_y;
+                        score_1_nxt = temp_score_1;
+                        score_2_nxt = temp_score_2;
+                    end
+                    state_nxt = BYTE_0;
                 end
-                state_nxt = IDLE;
+                else begin
+                    state_nxt = BYTE_11;
+                end
             end
 
             default: begin
-                state_nxt = IDLE;
+                state_nxt = BYTE_0;
             end
         endcase
     end

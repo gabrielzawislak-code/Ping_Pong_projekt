@@ -9,6 +9,15 @@
  *
  * Frame layout: [header][paddle_y hi][paddle_y lo][0xAA]
  * header = {4'hB, flag_char[2:0]}
+ *
+ * BYTE_0 both examines AND (on any outcome) pops the byte it is looking
+ * at, so header-hunting always makes forward progress one byte at a
+ * time and never re-examines a byte it has already rejected. Every
+ * other byte read goes through the WAIT state, which exists purely to
+ * let the one-cycle FIFO read latency settle (rd asserted this cycle ->
+ * the new byte is only visible on r_data the cycle after) before the
+ * next BYTE_x state samples data_in - skipping that settle cycle would
+ * make every field read the previous byte instead of its own.
  */
 module receive_paddle_frame(
     input logic clk,
@@ -25,9 +34,11 @@ module receive_paddle_frame(
     logic [10:0] temp_paddle, temp_paddle_nxt, paddle_y_nxt;
     logic [2:0] peer_flag_char_nxt;
     logic rd_en_nxt;
+    logic [1:0] counter, counter_nxt;
 
     enum logic [2:0] {
         BYTE_0,
+        WAIT,
         BYTE_1,
         BYTE_2,
         BYTE_3
@@ -39,6 +50,7 @@ module receive_paddle_frame(
             temp_paddle <= 334;
             peer_flag_char <= FLAG_IDLE;
             rd_en <= 1'b0;
+            counter <= '0;
             state <= BYTE_0;
         end
         else begin
@@ -46,6 +58,7 @@ module receive_paddle_frame(
             temp_paddle <= temp_paddle_nxt;
             peer_flag_char <= peer_flag_char_nxt;
             rd_en <= rd_en_nxt;
+            counter <= counter_nxt;
             state <= state_nxt;
         end
     end
@@ -55,6 +68,7 @@ module receive_paddle_frame(
         paddle_y_nxt = paddle_y;
         peer_flag_char_nxt = peer_flag_char;
         rd_en_nxt = 1'b0;
+        counter_nxt = counter;
         state_nxt = state;
 
         case(state)
@@ -64,17 +78,33 @@ module receive_paddle_frame(
 
                     if(data_in[7:4] == 4'hB) begin
                         peer_flag_char_nxt = data_in[2:0];
-                        state_nxt = BYTE_1;
+                        counter_nxt = 2'd1;
+                        state_nxt = WAIT;
                     end
-                    // else: not our header - stay in BYTE_0, resync on the next byte
+                    else begin
+                        // Not a header byte - it has still been popped
+                        // above, so the next cycle examines a fresh
+                        // byte instead of re-checking this same one.
+                        state_nxt = BYTE_0;
+                    end
                 end
+            end
+
+            WAIT: begin
+                case(counter)
+                    2'd1:    state_nxt = BYTE_1;
+                    2'd2:    state_nxt = BYTE_2;
+                    2'd3:    state_nxt = BYTE_3;
+                    default: state_nxt = BYTE_0;
+                endcase
             end
 
             BYTE_1: begin
                 if(!rx_empty) begin
                     rd_en_nxt = 1'b1;
                     temp_paddle_nxt[10:8] = data_in[2:0];
-                    state_nxt = BYTE_2;
+                    counter_nxt = 2'd2;
+                    state_nxt = WAIT;
                 end
             end
 
@@ -82,7 +112,8 @@ module receive_paddle_frame(
                 if(!rx_empty) begin
                     rd_en_nxt = 1'b1;
                     temp_paddle_nxt[7:0] = data_in;
-                    state_nxt = BYTE_3;
+                    counter_nxt = 2'd3;
+                    state_nxt = WAIT;
                 end
             end
 
