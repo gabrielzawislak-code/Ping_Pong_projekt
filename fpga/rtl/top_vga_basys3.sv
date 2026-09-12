@@ -35,6 +35,8 @@ module top_vga_basys3 (
         input  wire [4:0] speed_sw,
         input  wire [0:0] JC,     // UART RX <- other board
         output wire [0:0] JXADC,  // UART TX -> other board
+        output wire [4:0] led,    // DEBUG: [3:0] = receive_state_frame FSM state,
+                                   //        [4]   = latched "full frame ever decoded OK"
         output wire Vsync,
         output wire Hsync,
         output wire [3:0] vgaRed,
@@ -160,7 +162,9 @@ module top_vga_basys3 (
         .g(vgaGreen),
         .b(vgaBlue),
         .hs(Hsync),
-        .vs(Vsync)
+        .vs(Vsync),
+        .dbg_led_state(led[3:0]),
+        .dbg_led_frame_ok(led[4])
     );
 
 endmodule

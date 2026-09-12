@@ -30,7 +30,9 @@ module receive_state_frame(
     output logic [10:0] ball_y,
     output logic [3:0] score_1,
     output logic [3:0] score_2,
-    output logic [2:0] flag_char
+    output logic [2:0] flag_char,
+    output logic [3:0] dbg_state,   // DEBUG: raw FSM state, for LED bring-up
+    output logic dbg_frame_ok       // DEBUG: 1-cycle pulse, trailer (0xAA) matched
 );
 
     localparam logic [2:0] FLAG_IDLE = 3'b001;
@@ -62,8 +64,13 @@ module receive_state_frame(
         BYTE_11
     } state, state_nxt;
 
+    assign dbg_state = state;
+
+    logic dbg_frame_ok_nxt;
+
     always_ff @(posedge clk, negedge rst_n) begin
         if(!rst_n) begin
+           dbg_frame_ok <= 1'b0;
            paddle_1_y <= 334;
            temp_paddle_1 <= 334;
            paddle_2_y <= 334;
@@ -100,10 +107,12 @@ module receive_state_frame(
             rd_en <= rd_en_nxt;
             counter <= counter_nxt;
             state <= state_nxt;
+            dbg_frame_ok <= dbg_frame_ok_nxt;
         end
     end
 
     always_comb begin
+        dbg_frame_ok_nxt = 1'b0;
         temp_paddle_1_nxt = temp_paddle_1;
         paddle_1_y_nxt = paddle_1_y;
         temp_paddle_2_nxt = temp_paddle_2;
@@ -323,6 +332,7 @@ module receive_state_frame(
                         ball_y_nxt = temp_ball_y;
                         score_1_nxt = temp_score_1;
                         score_2_nxt = temp_score_2;
+                        dbg_frame_ok_nxt = 1'b1;
                     end
                     state_nxt = BYTE_0;
                 end
