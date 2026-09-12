@@ -28,6 +28,7 @@ module send_state_frame(
     input logic [10:0] ball_y,
     input logic [3:0] score_1,
     input logic [3:0] score_2,
+    input logic resync,   // periodic force-restart, see top_vga.sv
     output logic [7:0] data_out,
     output logic wr_en
 );
@@ -188,6 +189,15 @@ module send_state_frame(
                 state_nxt = BYTE_0;
             end
         endcase
+
+        // Periodic forced restart: if this FSM is ever stalled waiting on
+        // something that never comes (e.g. tx_full stuck, or any other
+        // wedge we have not fully root-caused under time pressure), this
+        // guarantees it re-tries a fresh frame at least every ~200 ms
+        // instead of staying stuck indefinitely.
+        if(resync) begin
+            state_nxt = BYTE_0;
+        end
     end
 
 endmodule

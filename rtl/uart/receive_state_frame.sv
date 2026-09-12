@@ -31,6 +31,7 @@ module receive_state_frame(
     output logic [3:0] score_1,
     output logic [3:0] score_2,
     output logic [2:0] flag_char,
+    input logic resync,             // periodic force-restart, see top_vga.sv
     output logic [3:0] dbg_state,   // DEBUG: raw FSM state, for LED bring-up
     output logic dbg_frame_ok       // DEBUG: 1-cycle pulse, trailer (0xAA) matched
 );
@@ -345,6 +346,17 @@ module receive_state_frame(
                 state_nxt = BYTE_0;
             end
         endcase
+
+        // Periodic forced restart: if this FSM is ever stalled waiting on
+        // something that never comes (e.g. tx_full stuck, or any other
+        // wedge we have not fully root-caused under time pressure), this
+        // guarantees it re-tries a fresh frame at least every ~200 ms
+        // instead of staying stuck indefinitely. Does not touch the
+        // already-committed outputs (ball/paddle/score/flag_char) -
+        // only abandons whatever in-progress decode attempt is running.
+        if(resync) begin
+            state_nxt = BYTE_0;
+        end
     end
 
 endmodule
