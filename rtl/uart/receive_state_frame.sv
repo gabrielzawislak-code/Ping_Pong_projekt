@@ -324,7 +324,10 @@ module receive_state_frame(
                         score_1_nxt = temp_score_1;
                         score_2_nxt = temp_score_2;
                     end
-                    state_nxt = BYTE_0;
+                    // Go through WAIT like every other byte transition,
+                    // instead of jumping straight back to BYTE_0.
+                    counter_nxt = 0;
+                    state_nxt = WAIT;
                 end
                 else begin
                     state_nxt = BYTE_11;
