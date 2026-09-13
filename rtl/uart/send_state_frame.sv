@@ -3,7 +3,7 @@
  *
  * Description:
  * HOST -> CLIENT frame. Periodically (every ref_time tick) sends a fixed
- * 13-byte frame describing the local game state and everything the peer
+ * 12-byte frame describing the local game state and everything the peer
  * needs to render an identical screen: both paddles, the ball and the
  * score (the HOST owns the whole game simulation). Every write is gated
  * on tx_full so a byte is only pushed into the UART TX FIFO once there is
@@ -13,12 +13,8 @@
  * Frame layout: [header][paddle_1_y hi][paddle_1_y lo]
  *               [paddle_2_y hi][paddle_2_y lo]
  *               [ball_x hi][ball_x lo][ball_y hi][ball_y lo]
- *               [score_1][score_2][hamming parity][0xAA]
+ *               [score_1][score_2][0xAA]
  * header = {4'hA, flag_char[2:0]} -> 0xA1 IDLE, 0xA2 READY, 0xA3 PLAYING, 0xA4 END
- * The 10 payload bytes (everything between header and parity) are
- * protected by a Hamming SECDED code - see hamming_secded.sv - so the
- * receiver can correct a single bit flipped on the wire instead of
- * silently committing a corrupted state.
  */
 module send_state_frame(
     input logic clk,
@@ -36,8 +32,6 @@ module send_state_frame(
     output logic wr_en
 );
 
-    import hamming_secded_pkg::*;
-
     enum logic [3:0] {
         BYTE_0,
         WAIT,
@@ -51,26 +45,22 @@ module send_state_frame(
         BYTE_8,
         BYTE_9,
         BYTE_10,
-        PARITY,
         TERM
     } state, state_nxt;
 
     logic wr_en_nxt;
     logic [7:0] data_out_nxt;
-    logic [79:0] payload, payload_nxt;
 
     always_ff @(posedge clk, negedge rst_n) begin
         if(!rst_n) begin
             data_out <= '0;
             wr_en <= '0;
             state <= BYTE_0;
-            payload <= '0;
         end
         else begin
             data_out <= data_out_nxt;
             state <= state_nxt;
             wr_en <= wr_en_nxt;
-            payload <= payload_nxt;
         end
     end
 
@@ -78,7 +68,6 @@ module send_state_frame(
         data_out_nxt = data_out;
         wr_en_nxt = '0;
         state_nxt = state;
-        payload_nxt = payload;
 
         case(state)
             BYTE_0: begin
@@ -110,7 +99,6 @@ module send_state_frame(
             BYTE_1: begin
                 if(!tx_full) begin
                     data_out_nxt = {5'b0, paddle_1_y[10:8]};
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_2;
                 end
@@ -119,7 +107,6 @@ module send_state_frame(
             BYTE_2: begin
                 if(!tx_full) begin
                     data_out_nxt = paddle_1_y[7:0];
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_3;
                 end
@@ -128,7 +115,6 @@ module send_state_frame(
             BYTE_3: begin
                 if(!tx_full) begin
                     data_out_nxt = {5'b0, paddle_2_y[10:8]};
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_4;
                 end
@@ -137,7 +123,6 @@ module send_state_frame(
             BYTE_4: begin
                 if(!tx_full) begin
                     data_out_nxt = paddle_2_y[7:0];
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_5;
                 end
@@ -146,7 +131,6 @@ module send_state_frame(
             BYTE_5: begin
                 if(!tx_full) begin
                     data_out_nxt = {5'b0, ball_x[10:8]};
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_6;
                 end
@@ -155,7 +139,6 @@ module send_state_frame(
             BYTE_6: begin
                 if(!tx_full) begin
                     data_out_nxt = ball_x[7:0];
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_7;
                 end
@@ -164,7 +147,6 @@ module send_state_frame(
             BYTE_7: begin
                 if(!tx_full) begin
                     data_out_nxt = {5'b0, ball_y[10:8]};
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_8;
                 end
@@ -173,7 +155,6 @@ module send_state_frame(
             BYTE_8: begin
                 if(!tx_full) begin
                     data_out_nxt = ball_y[7:0];
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_9;
                 end
@@ -182,7 +163,6 @@ module send_state_frame(
             BYTE_9: begin
                 if(!tx_full) begin
                     data_out_nxt = {4'b0, score_1};
-                    payload_nxt = {payload[71:0], data_out_nxt};
                     wr_en_nxt = 1'b1;
                     state_nxt = BYTE_10;
                 end
@@ -191,15 +171,6 @@ module send_state_frame(
             BYTE_10: begin
                 if(!tx_full) begin
                     data_out_nxt = {4'b0, score_2};
-                    payload_nxt = {payload[71:0], data_out_nxt};
-                    wr_en_nxt = 1'b1;
-                    state_nxt = PARITY;
-                end
-            end
-
-            PARITY: begin
-                if(!tx_full) begin
-                    data_out_nxt = hamming_encode(payload_nxt);
                     wr_en_nxt = 1'b1;
                     state_nxt = TERM;
                 end

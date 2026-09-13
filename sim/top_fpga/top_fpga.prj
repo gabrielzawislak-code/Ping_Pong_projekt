@@ -27,7 +27,6 @@ sv work ../../rtl/video/vga_pkg.sv \
         ../../rtl/game/ball_speed_ctrl.sv \
         ../../rtl/video/draw_hud.sv \
         ../../rtl/uart/uart_sync.sv \
-        ../../rtl/uart/hamming_secded.sv \
         ../../rtl/uart/send_state_frame.sv \
         ../../rtl/uart/receive_state_frame.sv \
         ../../rtl/uart/send_paddle_frame.sv \

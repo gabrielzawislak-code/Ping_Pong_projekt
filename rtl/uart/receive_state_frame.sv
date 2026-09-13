@@ -2,7 +2,7 @@
  * Author: Mateusz Zybura, Gabriel Zawiślak
  *
  * Description:
- * CLIENT: decodes the 13-byte frame broadcast by the HOST board (both
+ * CLIENT: decodes the 12-byte frame broadcast by the HOST board (both
  * paddles, the ball, the score and the current game state) and hands it
  * straight to the local rendering pipeline / ball_pos mux in top_vga -
  * the CLIENT never computes the ball or the score itself, it only
@@ -19,12 +19,9 @@
  * make every field read the previous byte instead of its own.
  *
  * BYTE_1..BYTE_10 just shift the 10 raw payload bytes into raw_payload;
- * they are not unpacked into fields until PARITY has read the Hamming
- * byte and TERM has both checked the 0xAA terminator and asked
- * hamming_decode() whether the payload is clean/correctable/corrupt (see
- * hamming_secded.sv). The frame is only committed to paddle_1_y etc. if
- * the terminator matches AND the payload was clean or a single flipped
- * bit could be corrected - a frame with two or more flipped bits is
+ * they are not unpacked into fields until TERM confirms the 0xAA
+ * terminator. The frame is only committed to paddle_1_y etc. if the
+ * terminator matches - a mismatched terminator means the frame is
  * dropped instead of being displayed as garbage.
  *
  * flag_char (the peer's game_fsm state - IDLE/READY/PLAYING/END) works
@@ -36,18 +33,18 @@
  * other board's game_fsm) is only updated once TERM confirms the whole
  * frame is genuinely valid, exactly like the game-state fields.
  *
- * RESYNC: if TERM's check fails (bad terminator, or an uncorrectable
- * 2+ bit error), the most likely explanation is that header-hunting
- * locked onto the wrong byte in the first place - any payload byte can, by
- * chance, share the header's upper nibble (data_in[7:4]==4'hA), which is
- * exactly what can happen if this board starts listening mid-frame
- * (e.g. the two boards power up a moment apart). Since every frame is
- * the same fixed length, simply going back to BYTE_0 after a failure
- * re-counts from the same wrong phase and fails identically forever -
- * TERM routes a failure through RESYNC instead, which eats one extra
- * byte before resuming header-hunt. That shifts the phase by one, so
- * within at most one frame's worth of failures the true frame boundary
- * is guaranteed to line up.
+ * RESYNC: if TERM's check fails (bad terminator), the most likely
+ * explanation is that header-hunting locked onto the wrong byte in the
+ * first place - any payload byte can, by chance, share the header's
+ * upper nibble (data_in[7:4]==4'hA), which is exactly what can happen if
+ * this board starts listening mid-frame (e.g. the two boards power up a
+ * moment apart). Since every frame is the same fixed length, simply
+ * going back to BYTE_0 after a failure re-counts from the same wrong
+ * phase and fails identically forever - TERM routes a failure through
+ * RESYNC instead, which eats one extra byte before resuming
+ * header-hunt. That shifts the phase by one, so within at most one
+ * frame's worth of failures the true frame boundary is guaranteed to
+ * line up.
  */
 module receive_state_frame(
     input logic clk,
@@ -67,16 +64,12 @@ module receive_state_frame(
     output logic resync_hit   // 1-cycle pulse: a frame attempt failed and RESYNC kicked in
 );
 
-    import hamming_secded_pkg::*;
-
     localparam logic [2:0] FLAG_IDLE = 3'b001;
 
     logic [10:0] paddle_1_y_nxt, paddle_2_y_nxt, ball_x_nxt, ball_y_nxt;
     logic [3:0] score_1_nxt, score_2_nxt;
 
     logic [79:0] raw_payload, raw_payload_nxt;
-    logic [7:0] parity_byte, parity_byte_nxt;
-    logic [81:0] decoded; // {status[1:0], corrected raw_payload[79:0]}
     logic [2:0] pending_flag, pending_flag_nxt;
 
     logic [2:0] flag_char_nxt;
@@ -99,7 +92,6 @@ module receive_state_frame(
         BYTE_8,
         BYTE_9,
         BYTE_10,
-        PARITY,
         TERM,
         RESYNC
     } state, state_nxt;
@@ -114,7 +106,6 @@ module receive_state_frame(
            score_2 <= '0;
 
            raw_payload <= '0;
-           parity_byte <= '0;
            pending_flag <= FLAG_IDLE;
 
            flag_char <= FLAG_IDLE;
@@ -134,7 +125,6 @@ module receive_state_frame(
             score_2 <= score_2_nxt;
 
             raw_payload <= raw_payload_nxt;
-            parity_byte <= parity_byte_nxt;
             pending_flag <= pending_flag_nxt;
 
             flag_char <= flag_char_nxt;
@@ -156,7 +146,6 @@ module receive_state_frame(
         score_2_nxt = score_2;
 
         raw_payload_nxt = raw_payload;
-        parity_byte_nxt = parity_byte;
         pending_flag_nxt = pending_flag;
 
         rd_en_nxt = 0;
@@ -165,7 +154,6 @@ module receive_state_frame(
         header_seen_nxt = 0;
         resync_hit_nxt = 0;
         counter_nxt = counter;
-        decoded = hamming_decode(raw_payload, parity_byte);
 
         case(state)
             BYTE_0: begin
@@ -227,9 +215,6 @@ module receive_state_frame(
                     state_nxt = BYTE_10;
                 end
                 else if(counter == 11) begin
-                    state_nxt = PARITY;
-                end
-                else if(counter == 12) begin
                     state_nxt = TERM;
                 end
                 else begin
@@ -357,29 +342,11 @@ module receive_state_frame(
                 end
             end
 
-            PARITY: begin
-                if(!rx_empty) begin
-                    parity_byte_nxt = data_in;
-                    rd_en_nxt = 1;
-                    counter_nxt = counter + 1;
-                    state_nxt = WAIT;
-                end
-                else begin
-                    state_nxt = PARITY;
-                end
-            end
-
             TERM: begin
                 if(!rx_empty) begin
                     rd_en_nxt = 1;
                     counter_nxt = 0;
 
-                    // Diagnostic confirmed: disabling Hamming did NOT
-                    // reliably fix the CLIENT-side sync issue (still
-                    // failed intermittently), so it is not the (sole)
-                    // cause. Left disabled per request while the real
-                    // cause is still being hunted - fields come straight
-                    // from raw_payload, uncorrected.
                     if(data_in == 8'hAA) begin
                         paddle_1_y_nxt = {raw_payload[74:72], raw_payload[71:64]};
                         paddle_2_y_nxt = {raw_payload[58:56], raw_payload[55:48]};
@@ -395,8 +362,7 @@ module receive_state_frame(
                         state_nxt = WAIT;
                     end
                     else begin
-                        // Bad terminator, or 2+ bit errors Hamming
-                        // couldn't fix - see RESYNC above.
+                        // Bad terminator - see RESYNC above.
                         resync_hit_nxt = 1;
                         state_nxt = RESYNC;
                     end
