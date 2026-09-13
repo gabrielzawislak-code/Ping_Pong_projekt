@@ -18,7 +18,8 @@ sim/build/
 fpga/dfx_runtime.txt
 tools/build/
 
-# Synthesis/simulation outputs - regenerate with
-# tools/generate_bitstream.sh / tools/run_simulation.sh, do not commit.
-results/*.bit
+# Simulation frame dumps - regenerate with tools/run_simulation.sh, do not
+# commit. NOTE: results/*.bit is intentionally NOT ignored - the course
+# requirements (10.1.3) require the final bitstream to be committed in
+# results/ for grading.
 results/*.tif
