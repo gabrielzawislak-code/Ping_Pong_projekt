@@ -27,6 +27,16 @@
  * thing that can show up on the link before both boards are sending
  * real frames - so committing on the header alone risked the peer
  * looking "ready" before it actually was.
+ *
+ * BYTE_3 routes back to BYTE_0 through WAIT, same as every other byte
+ * transition here - this used to jump straight to BYTE_0, which is the
+ * exact same one-cycle-early-read bug that used to freeze the CLIENT
+ * after one good HOST->CLIENT frame (see receive_state_frame.sv): the
+ * terminator's registered rd_en actually pops it on the same edge that
+ * BYTE_0 starts examining data_in, so BYTE_0 was inspecting the
+ * not-yet-updated terminator byte instead of a fresh one, and (whether
+ * or not it happened to match a header) always re-popped on top of it,
+ * shifting every later frame boundary by one byte, permanently.
  */
 module receive_paddle_frame(
     input logic clk,
@@ -138,7 +148,10 @@ module receive_paddle_frame(
                         paddle_y_nxt = temp_paddle;
                         peer_flag_char_nxt = temp_flag;
                     end
-                    state_nxt = BYTE_0;
+                    // Through WAIT like every other byte transition,
+                    // instead of jumping straight back to BYTE_0.
+                    counter_nxt = 2'd0;
+                    state_nxt = WAIT;
                 end
             end
 
