@@ -93,35 +93,6 @@ module top_vga (
     logic [2:0] peer_state;
 
     /**
-     * Periodic forced-restart pulse for the HOST->CLIENT state-frame
-     * TX/RX pair (send_state_frame / receive_state_frame). Empirically,
-     * manually interrupting and resuming that link (by flipping is_host
-     * on the HOST and back) reliably unstuck a stalled transfer for one
-     * frame; this reproduces the same "interrupt and retry" effect on
-     * its own, continuously, roughly every ~200 ms (13,000,000 cycles
-     * at 65 MHz) - far more often than the ~16.7 ms it takes to send one
-     * full frame, so it costs at most a handful of missed frames each
-     * time, not the game's responsiveness.
-     */
-    logic [23:0] resync_counter;
-    logic resync_pulse;
-
-    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
-        if(!rst_n) begin
-            resync_counter <= '0;
-            resync_pulse <= 1'b0;
-        end
-        else if(resync_counter >= 24'd13_000_000) begin
-            resync_counter <= '0;
-            resync_pulse <= 1'b1;
-        end
-        else begin
-            resync_counter <= resync_counter + 24'd1;
-            resync_pulse <= 1'b0;
-        end
-    end
-
-    /**
      * Signals assignments
      */
 
@@ -306,7 +277,6 @@ module top_vga (
         .ball_y(ball_y),
         .score_1(score_1),
         .score_2(score_2),
-        .resync(resync_pulse),
         .data_out(data_state),
         .wr_en(wr_en_state)
     );
@@ -344,7 +314,6 @@ module top_vga (
         .score_1(score_1_rx),
         .score_2(score_2_rx),
         .flag_char(host_flag_rx),
-        .resync(resync_pulse),
         .dbg_state(dbg_led_state),
         .dbg_frame_ok(dbg_frame_ok_pulse)
     );
