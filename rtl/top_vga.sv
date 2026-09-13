@@ -44,10 +44,7 @@ module top_vga (
         output logic hs,
         output logic [3:0] r,
         output logic [3:0] g,
-        output logic [3:0] b,
-        output logic [3:0] dbg_led_state,  // DEBUG: receive_state_frame's raw FSM state
-        output logic dbg_led_frame_ok      // DEBUG: latched high once a full 12-byte
-                                            // HOST frame has ever been decoded OK
+        output logic [3:0] b
     );
 
     timeunit 1ns;
@@ -299,8 +296,6 @@ module top_vga (
      */
     assign rd_uart = is_host ? rd_en_paddle : rd_en_state;
 
-    logic dbg_frame_ok_pulse;
-
     receive_state_frame u_receive_state_frame(
         .clk(clk_65Mhz),
         .rst_n,
@@ -313,21 +308,8 @@ module top_vga (
         .ball_y(ball_y_rx),
         .score_1(score_1_rx),
         .score_2(score_2_rx),
-        .flag_char(host_flag_rx),
-        .dbg_state(dbg_led_state),
-        .dbg_frame_ok(dbg_frame_ok_pulse)
+        .flag_char(host_flag_rx)
     );
-
-    // DEBUG: latch dbg_frame_ok_pulse so a single successful decode stays
-    // visible on the LED instead of a single 15ns blip.
-    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
-        if(!rst_n) begin
-            dbg_led_frame_ok <= 1'b0;
-        end
-        else if(dbg_frame_ok_pulse) begin
-            dbg_led_frame_ok <= 1'b1;
-        end
-    end
 
     receive_paddle_frame u_receive_paddle_frame(
         .clk(clk_65Mhz),
