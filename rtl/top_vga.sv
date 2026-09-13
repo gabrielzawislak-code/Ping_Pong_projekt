@@ -45,24 +45,14 @@ module top_vga (
         output logic [3:0] r,
         output logic [3:0] g,
         output logic [3:0] b,
-        // Debug:
-        //   led[8] = link_ready - lit once the startup sync handshake
-        //            has locked onto the peer (see below); real frames
-        //            are not sent/decoded before this
-        //   led[7] = resync_hit  - toggles every time a frame attempt
-        //            failed and RESYNC kicked in (see receive_state_frame.sv)
-        //   led[6] = header_seen - toggles every time BYTE_0 locks onto
-        //            ANY candidate header byte, true or false
-        //   led[5] = TX heartbeat - toggles on every byte this board
-        //            writes to its own UART TX FIFO (is it sending at all)
-        //   led[4] = is_host
+        // Debug LEDs:
+        //   led[8]   = link_ready (startup handshake done)
+        //   led[7]   = resync_hit toggle
+        //   led[6]   = header_seen toggle
+        //   led[5]   = TX heartbeat toggle
+        //   led[4]   = is_host
         //   led[3:1] = peer_state (001 IDLE, 010 READY, 011 PLAYING, 100 END)
-        //   led[0] = RX heartbeat - blinks whenever a valid frame from
-        //            the peer is committed
-        // led[8] dark forever means the two boards never found each
-        // other's sync byte at all (check the physical link); led[8] lit
-        // but led[0] dark means the handshake worked but real frames
-        // still aren't validating.
+        //   led[0]   = RX heartbeat
         output logic [8:0] led
     );
 
@@ -108,9 +98,7 @@ module top_vga (
 
     logic [2:0] peer_state;
 
-    // Debug signals from the state-frame receiver - wired to led[7:5] at
-    // the bottom of this file, once wr_uart and every instance below
-    // actually exist.
+    // Debug LED signals, driven at the bottom of the file
     logic frame_valid_state, frame_valid_paddle, frame_valid;
     logic header_seen, resync_hit;
 
@@ -274,21 +262,12 @@ module top_vga (
     );
 
     /**
-     * Startup link handshake: before trusting ANY real frame, both
-     * boards just spam a fixed byte (SYNC_BYTE) as fast as the link
-     * allows and watch for that SAME byte coming back from the peer
-     * SYNC_MATCHES_NEEDED times in a row. Only once that happens does
-     * real frame TX/RX take over (link_ready, sticky until reset).
-     *
-     * Why: the two boards are programmed/powered up at different
-     * moments (Vivado flashes one, then the other) - whichever board's
-     * receiver comes up second starts listening mid-stream relative to
-     * the other's real frames, with no guarantee it lands on a genuine
-     * frame boundary. A run of a fixed byte is trivial to recognize
-     * correctly regardless of when you start listening - there is no
-     * "mid-frame" for a single repeated byte - so this sidesteps the
-     * alignment gamble entirely instead of trying to recover from it
-     * after the fact.
+     * Startup handshake: both boards spam SYNC_BYTE and wait to see it
+     * echoed back SYNC_MATCHES_NEEDED times in a row before switching to
+     * real frame TX/RX (link_ready, sticky until reset). Needed because
+     * the two boards are programmed at different times, so a receiver
+     * can start listening mid-frame with no guarantee of landing on a
+     * real frame boundary.
      */
     localparam logic [7:0] SYNC_BYTE = 8'h55;
     localparam logic [3:0] SYNC_MATCHES_NEEDED = 4'd8;
@@ -446,10 +425,7 @@ module top_vga (
     assign tx_pin = tx;
 
     /**
-     * Debug LEDs - see the port declaration comment above for what each
-     * bit means. led[7:5] toggle once per event (rather than dividing a
-     * counter down) so both fast, continuous activity and rare, one-off
-     * events stay visible.
+     * Debug LEDs - see port declaration for bit assignment.
      */
     assign frame_valid = is_host ? frame_valid_paddle : frame_valid_state;
 

@@ -48,8 +48,7 @@ set_property PACKAGE_PIN R2 [get_ports {speed_sw[4]}]
 
 
 ## LEDs
-## Debug: led[4]=is_host, led[3:1]=peer_state, led[0]=heartbeat (blinks
-## when a valid frame from the peer is being received) - see top_vga.sv
+## Debug LEDs - see top_vga.sv
 set_property PACKAGE_PIN U16 [get_ports {led[0]}]
 	set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}]
 set_property PACKAGE_PIN E19 [get_ports {led[1]}]

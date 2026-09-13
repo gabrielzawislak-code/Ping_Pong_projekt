@@ -2,49 +2,25 @@
  * Author: Mateusz Zybura, Gabriel Zawiślak
  *
  * Description:
- * CLIENT: decodes the 12-byte frame broadcast by the HOST board (both
- * paddles, the ball, the score and the current game state) and hands it
- * straight to the local rendering pipeline / ball_pos mux in top_vga -
- * the CLIENT never computes the ball or the score itself, it only
- * mirrors what the HOST reports (its own paddle is still computed
- * locally by paddle_mover, for zero-latency response).
+ * CLIENT: decodes the 12-byte frame sent by the HOST (paddles, ball,
+ * score, game state) and passes it to the rendering pipeline / ball_pos
+ * mux in top_vga. The CLIENT does not compute the ball or score itself,
+ * it just mirrors the HOST; its own paddle is still computed locally by
+ * paddle_mover.
  *
- * BYTE_0 both examines AND (on any outcome) pops the byte it is looking
- * at, so header-hunting always makes forward progress one byte at a
- * time and never re-examines a byte it has already rejected. Every
- * other byte read goes through the WAIT state, which exists purely to
- * let the one-cycle FIFO read latency settle (rd asserted this cycle ->
- * the new byte is only visible on r_data the cycle after) before the
- * next BYTE_x state samples data_in - skipping that settle cycle would
- * make every field read the previous byte instead of its own.
+ * BYTE_0 checks and pops the byte in the same step. Every other byte
+ * goes through WAIT first, to let the FIFO's one-cycle read latency
+ * settle before the next state reads data_in.
  *
- * BYTE_1..BYTE_10 just shift the 10 raw payload bytes into raw_payload;
- * they are not unpacked into fields until TERM confirms the 0xAA
- * terminator. The frame is only committed to paddle_1_y etc. if the
- * terminator matches - a mismatched terminator means the frame is
- * dropped instead of being displayed as garbage.
+ * Payload bytes are unpacked into fields only once TERM sees the 0xAA
+ * terminator; a bad terminator drops the frame. flag_char works the
+ * same way - the header byte alone is not enough to trust it, so it is
+ * held in pending_flag until TERM confirms the frame.
  *
- * flag_char (the peer's game_fsm state - IDLE/READY/PLAYING/END) works
- * the same way: BYTE_0 only buffers the header's flag bits into
- * pending_flag, it does not touch flag_char itself. A bare header-nibble
- * match (data_in[7:4]==4'hA) is a weak check on its own - about 1 in 16
- * for a stray/noise byte, e.g. on link power-up before both boards are
- * sending real frames - so flag_char (and with it peer_state on the
- * other board's game_fsm) is only updated once TERM confirms the whole
- * frame is genuinely valid, exactly like the game-state fields.
- *
- * RESYNC: if TERM's check fails (bad terminator), the most likely
- * explanation is that header-hunting locked onto the wrong byte in the
- * first place - any payload byte can, by chance, share the header's
- * upper nibble (data_in[7:4]==4'hA), which is exactly what can happen if
- * this board starts listening mid-frame (e.g. the two boards power up a
- * moment apart). Since every frame is the same fixed length, simply
- * going back to BYTE_0 after a failure re-counts from the same wrong
- * phase and fails identically forever - TERM routes a failure through
- * RESYNC instead, which eats one extra byte before resuming
- * header-hunt. That shifts the phase by one, so within at most one
- * frame's worth of failures the true frame boundary is guaranteed to
- * line up.
+ * RESYNC: a failed frame usually means header hunting locked onto the
+ * wrong byte. Going straight back to BYTE_0 would repeat the same
+ * mistake every frame (fixed frame length), so RESYNC eats one extra
+ * byte first to shift the alignment.
  */
 module receive_state_frame(
     input logic clk,
@@ -59,9 +35,9 @@ module receive_state_frame(
     output logic [3:0] score_1,
     output logic [3:0] score_2,
     output logic [2:0] flag_char,
-    output logic frame_valid, // 1-cycle pulse: a whole frame just checked out and was committed
-    output logic header_seen, // 1-cycle pulse: BYTE_0 locked onto a candidate header byte
-    output logic resync_hit   // 1-cycle pulse: a frame attempt failed and RESYNC kicked in
+    output logic frame_valid, // pulses when a frame is committed
+    output logic header_seen, // pulses when BYTE_0 finds a candidate header
+    output logic resync_hit   // pulses when a failed frame triggers RESYNC
 );
 
     localparam logic [2:0] FLAG_IDLE = 3'b001;
@@ -161,20 +137,14 @@ module receive_state_frame(
                     rd_en_nxt = 1;
 
                     if(data_in[7:4] == 4'hA) begin
-                        // Buffered, not committed to flag_char yet - a
-                        // bare header-nibble match is weak on its own
-                        // (1 in 16 for random noise); only trust it once
-                        // TERM confirms the whole frame, same as every
-                        // other field.
+                        // held until TERM confirms the frame
                         pending_flag_nxt = data_in[2:0];
                         header_seen_nxt = 1;
                         counter_nxt = 1;
                         state_nxt = WAIT;
                     end
                     else begin
-                        // Not a header byte - it has still been popped
-                        // above, so the next cycle examines a fresh
-                        // byte instead of re-checking this same one.
+                        // not a header, byte already popped
                         state_nxt = BYTE_0;
                     end
                 end
@@ -356,13 +326,10 @@ module receive_state_frame(
                         score_2_nxt = raw_payload[3:0];
                         flag_char_nxt = pending_flag;
                         frame_valid_nxt = 1;
-                        // Frame lined up and checked out - resume
-                        // header-hunting from a fresh byte, same as
-                        // every other byte transition.
                         state_nxt = WAIT;
                     end
                     else begin
-                        // Bad terminator - see RESYNC above.
+                        // bad terminator, see RESYNC above
                         resync_hit_nxt = 1;
                         state_nxt = RESYNC;
                     end

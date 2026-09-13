@@ -3,15 +3,9 @@ module uart
    #( // Default setting:
       // ~9,600 baud, 8 data bits, 1 stop bit, 2^4 FIFO
       //
-      // Lowered from the original 19,200 baud: board-to-board UART now
-      // runs over unshielded jumper wires between two independently
-      // powered Basys3 boards (no termination, no level-matched grounds
-      // beyond a single shared GND wire) - halving the baud rate doubles
-      // the time budget per bit, which is the standard first response to
-      // marginal signal integrity on a link like this. The 12-byte
-      // HOST->CLIENT frame still comfortably fits in the ~60 Hz tick
-      // budget: 12 bytes * 10 bits / 9600 baud =~ 12.5 ms, versus a
-      // ~16.7 ms period between frames.
+      // 9600 baud instead of the usual 19200 for extra noise margin on
+      // the board-to-board link. Still fits well inside the ~60 Hz
+      // frame period (12 bytes * 10 bits / 9600 baud =~ 12.5 ms).
       parameter DBIT = 8,     // # data bits
                 SB_TICK = 16, // # ticks for stop bits, 16/24/32
                               // for 1/1.5/2 stop bits

@@ -2,18 +2,11 @@
  * Author: Mateusz Zybura, Gabriel Zawiślak
  *
  * Description:
- * Generates ball_pos's movement tick at a rate boosted by speed_pct percent
- * (0..150, in steps of 10 - see draw_hud.sv/top_vga_basys3.sv for how the
- * switches produce this value) over the base ~60Hz rate used everywhere
- * else in the game.
- *
- * Deliberately does not touch ball_pos, counter_refresh_time or the shared
- * ref_time used by paddle_mover - this module only ever feeds its own,
- * separate tick into ball_pos's ref_time input, so speeding up the ball
- * can never disturb the already-working paddle timing or collision logic.
- * The period for each speed_pct value is a precomputed constant (period =
- * base_period * 100 / (100 + speed_pct)), so there is no divider in the
- * hardware - just a table lookup and a counter, structured the same way as
+ * Generates ball_pos's movement tick at a rate boosted by speed_pct
+ * percent (0..150, steps of 10, from the speed switches) over the base
+ * ~60 Hz rate used elsewhere in the game. Produces its own separate
+ * tick, independent of counter_refresh_time and paddle_mover's ref_time.
+ * Period per speed_pct value is a precomputed table, same structure as
  * counter_refresh_time.
  */
 module ball_speed_ctrl(

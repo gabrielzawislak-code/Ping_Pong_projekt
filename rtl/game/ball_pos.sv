@@ -10,23 +10,17 @@
  * disagree about where a paddle or a wall actually is.
  *
  * Movement model: every tick, the ball's tentative next position on each
- * axis is computed in a widened, explicitly SIGNED intermediate (so a
- * value that would go negative compares correctly instead of silently
- * wrapping around to a huge number - the classic unsigned-subtraction
- * trap). If that tentative position would cross a paddle's face or the
- * top/bottom border, the ball is clamped exactly onto that plane and its
- * velocity on that axis is reflected - in the very same tick, so the
- * ball can never travel into or past whatever it just hit, no matter how
- * fast it is currently moving. Touching the left or right edge of the
- * screen is not a bounce - it ends the point.
+ * axis is computed in a widened, signed intermediate value, so negative
+ * results compare correctly. If that position crosses a paddle's face
+ * or the top/bottom border, the ball is clamped onto that plane and its
+ * velocity on that axis is reflected in the same tick. Touching the
+ * left or right edge ends the point instead of bouncing.
  *
  * The ball serves slowly and speeds up by one unit on every paddle
- * return (capped at MAX_SPEED), resetting to the slow serve speed after
- * each point. The vertical deflection off a paddle depends on where
- * along the paddle the ball made contact - a hit near an edge deflects
- * sharply, a hit near the middle stays close to horizontal. The serve
- * direction/angle is picked from a free-running LFSR so it varies from
- * game to game.
+ * return (capped at MAX_SPEED), resetting after each point. Vertical
+ * deflection off a paddle depends on where the ball hit it - near an
+ * edge deflects sharply, near the middle stays close to horizontal.
+ * Serve direction/angle comes from a free-running LFSR.
  */
 module ball_pos(
     input logic clk,
@@ -66,10 +60,8 @@ module ball_pos(
     logic [5:0] delay_counter, delay_counter_nxt;
 
     /**
-     * Free-running pseudo-random source (maximal-length 8-bit LFSR),
-     * used only to pick the ball's serve direction/angle. It shifts
-     * every clock cycle regardless of game state, so the bits sampled at
-     * the human-timed moment of serving are effectively unpredictable.
+     * Free-running 8-bit LFSR, used only to pick the serve direction and
+     * angle. Shifts every cycle regardless of game state.
      */
     logic [7:0] lfsr_reg;
 
@@ -82,24 +74,19 @@ module ball_pos(
         end
     end
 
-    // Tentative next position using the CURRENT velocity, widened and
-    // explicitly signed so a would-be negative result compares correctly
-    // instead of wrapping around like a plain unsigned subtraction would.
+    // Tentative next position, widened to a signed value so negative
+    // results compare correctly.
     logic signed [12:0] x_tent, y_tent;
     assign x_tent = $signed({1'b0, ball_x_reg}) + dx_reg;
     assign y_tent = $signed({1'b0, ball_y_reg}) + dy_reg;
 
-    // Does the ball's CURRENT vertical span overlap a given paddle's
-    // vertical span? Evaluated at the moment the ball's horizontal plane
-    // reaches that paddle.
+    // Does the ball's vertical span currently overlap a paddle's span?
     logic paddle1_y_overlap, paddle2_y_overlap;
     assign paddle1_y_overlap = ((ball_y_reg + BALL_SIZE) > paddle_y_1) && (ball_y_reg < (paddle_y_1 + PADDLE_HEIGHT));
     assign paddle2_y_overlap = ((ball_y_reg + BALL_SIZE) > paddle_y_2) && (ball_y_reg < (paddle_y_2 + PADDLE_HEIGHT));
 
-    // Hit-position-based deflection: how far the ball's center currently
-    // is from a paddle's center, scaled down with a shift instead of a
-    // divider - the offset magnitude (at most half a paddle plus half
-    // the ball) always fits after the shift.
+    // Deflection based on hit position: distance from ball center to
+    // paddle center, scaled down with a shift.
     logic signed [12:0] ball_center_y, offset_p1, offset_p2;
     logic signed [3:0] deflect_p1, deflect_p2;
     assign ball_center_y = $signed({1'b0, ball_y_reg}) + (BALL_SIZE / 2);

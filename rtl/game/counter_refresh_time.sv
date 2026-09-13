@@ -3,20 +3,11 @@
  *
  * Description:
  * Free-running periodic timer producing a single-cycle ref_time pulse at
- * ~60 Hz. Used to pace paddle movement (paddle_mover) and, on both
- * boards, to pace the UART frame senders (send_state_frame /
- * send_paddle_frame).
- *
- * ref_time ticks unconditionally, regardless of flag_char - it used to
- * be gated to only tick during PLAYING, but paddle_mover and ball_pos
- * already re-check flag_char==PLAYING internally before acting on a
- * tick, so gating it here again was redundant AND harmful: it silently
- * froze the UART senders during IDLE/READY (they use the same ref_time
- * to pace frame transmission), which meant a fresh flag_char/paddle/ball
- * update could never reach the peer board outside PLAYING - deadlocking
- * the READY -> PLAYING handshake and freezing the peer's view of the
- * game. Keeping the tick free-running fixes that without changing any
- * gameplay behaviour.
+ * ~60 Hz. Used to pace paddle movement (paddle_mover) and the UART
+ * frame senders (send_state_frame / send_paddle_frame) on both boards.
+ * Ticks unconditionally, regardless of flag_char - paddle_mover and
+ * ball_pos already check flag_char==PLAYING themselves before acting on
+ * a tick.
  */
 module counter_refresh_time(
     input logic clk,
