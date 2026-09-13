@@ -377,15 +377,16 @@ module receive_state_frame(
                     // Diagnostic confirmed: disabling Hamming did NOT
                     // reliably fix the CLIENT-side sync issue (still
                     // failed intermittently), so it is not the (sole)
-                    // cause - reinstated, since it only helps on a link
-                    // that turns out to be genuinely noisy.
-                    if(data_in == 8'hAA && decoded[81:80] != 2'd2) begin
-                        paddle_1_y_nxt = {decoded[74:72], decoded[71:64]};
-                        paddle_2_y_nxt = {decoded[58:56], decoded[55:48]};
-                        ball_x_nxt = {decoded[42:40], decoded[39:32]};
-                        ball_y_nxt = {decoded[26:24], decoded[23:16]};
-                        score_1_nxt = decoded[11:8];
-                        score_2_nxt = decoded[3:0];
+                    // cause. Left disabled per request while the real
+                    // cause is still being hunted - fields come straight
+                    // from raw_payload, uncorrected.
+                    if(data_in == 8'hAA) begin
+                        paddle_1_y_nxt = {raw_payload[74:72], raw_payload[71:64]};
+                        paddle_2_y_nxt = {raw_payload[58:56], raw_payload[55:48]};
+                        ball_x_nxt = {raw_payload[42:40], raw_payload[39:32]};
+                        ball_y_nxt = {raw_payload[26:24], raw_payload[23:16]};
+                        score_1_nxt = raw_payload[11:8];
+                        score_2_nxt = raw_payload[3:0];
                         flag_char_nxt = pending_flag;
                         frame_valid_nxt = 1;
                         // Frame lined up and checked out - resume

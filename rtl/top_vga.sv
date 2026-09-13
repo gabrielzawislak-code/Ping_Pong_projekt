@@ -45,8 +45,10 @@ module top_vga (
         output logic [3:0] r,
         output logic [3:0] g,
         output logic [3:0] b,
-        // Debug (state-frame receiver only - the one that has been
-        // acting up):
+        // Debug:
+        //   led[8] = link_ready - lit once the startup sync handshake
+        //            has locked onto the peer (see below); real frames
+        //            are not sent/decoded before this
         //   led[7] = resync_hit  - toggles every time a frame attempt
         //            failed and RESYNC kicked in (see receive_state_frame.sv)
         //   led[6] = header_seen - toggles every time BYTE_0 locks onto
@@ -57,11 +59,11 @@ module top_vga (
         //   led[3:1] = peer_state (001 IDLE, 010 READY, 011 PLAYING, 100 END)
         //   led[0] = RX heartbeat - blinks whenever a valid frame from
         //            the peer is committed
-        // led[0] dark but led[6]/led[7] active means frames ARE being
-        // attempted and failing/resyncing, not that nothing arrives at
-        // all; everything dark (led[6],[7] included) means nothing with
-        // a header-shaped byte is reaching this board's receiver, ever.
-        output logic [7:0] led
+        // led[8] dark forever means the two boards never found each
+        // other's sync byte at all (check the physical link); led[8] lit
+        // but led[0] dark means the handshake worked but real frames
+        // still aren't validating.
+        output logic [8:0] led
     );
 
     timeunit 1ns;
@@ -272,25 +274,93 @@ module top_vga (
     );
 
     /**
+     * Startup link handshake: before trusting ANY real frame, both
+     * boards just spam a fixed byte (SYNC_BYTE) as fast as the link
+     * allows and watch for that SAME byte coming back from the peer
+     * SYNC_MATCHES_NEEDED times in a row. Only once that happens does
+     * real frame TX/RX take over (link_ready, sticky until reset).
+     *
+     * Why: the two boards are programmed/powered up at different
+     * moments (Vivado flashes one, then the other) - whichever board's
+     * receiver comes up second starts listening mid-stream relative to
+     * the other's real frames, with no guarantee it lands on a genuine
+     * frame boundary. A run of a fixed byte is trivial to recognize
+     * correctly regardless of when you start listening - there is no
+     * "mid-frame" for a single repeated byte - so this sidesteps the
+     * alignment gamble entirely instead of trying to recover from it
+     * after the fact.
+     */
+    localparam logic [7:0] SYNC_BYTE = 8'h55;
+    localparam logic [3:0] SYNC_MATCHES_NEEDED = 4'd8;
+
+    logic link_ready, link_ready_nxt;
+    logic [3:0] sync_match_count, sync_match_count_nxt;
+    logic sync_rd_en, sync_rd_en_nxt;
+    logic sync_settle, sync_settle_nxt; // data_in is only valid the cycle after sync_rd_en
+
+    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
+        if(!rst_n) begin
+            link_ready <= 1'b0;
+            sync_match_count <= '0;
+            sync_rd_en <= 1'b0;
+            sync_settle <= 1'b0;
+        end
+        else begin
+            link_ready <= link_ready_nxt;
+            sync_match_count <= sync_match_count_nxt;
+            sync_rd_en <= sync_rd_en_nxt;
+            sync_settle <= sync_settle_nxt;
+        end
+    end
+
+    always_comb begin
+        link_ready_nxt = link_ready;
+        sync_match_count_nxt = sync_match_count;
+        sync_rd_en_nxt = 1'b0;
+        sync_settle_nxt = 1'b0;
+
+        if(!link_ready) begin
+            if(sync_settle) begin
+                if(r_data == SYNC_BYTE) begin
+                    if(sync_match_count == SYNC_MATCHES_NEEDED - 1) begin
+                        link_ready_nxt = 1'b1;
+                    end
+                    else begin
+                        sync_match_count_nxt = sync_match_count + 1;
+                    end
+                end
+                else begin
+                    sync_match_count_nxt = '0;
+                end
+            end
+            else if(!rx_empty) begin
+                sync_rd_en_nxt = 1'b1;
+                sync_settle_nxt = 1'b1;
+            end
+        end
+    end
+
+    /**
      * UART TX mux: only the frame encoder matching our own role actually
      * drives the shared FIFO. The other encoder is told the FIFO is
      * always full, so it simply stalls instead of running its state
-     * machine against writes that never happen.
+     * machine against writes that never happen. Both stay parked (told
+     * the FIFO is always full) until link_ready.
      */
     logic wr_en_state, wr_en_paddle;
     logic [7:0] data_state, data_paddle;
     logic wr_uart;
     logic [7:0] w_data;
 
-    assign wr_uart = is_host ? wr_en_state : wr_en_paddle;
-    assign w_data  = is_host ? data_state  : data_paddle;
+    assign wr_uart = link_ready ? (is_host ? wr_en_state : wr_en_paddle) : !tx_full;
+    assign w_data  = link_ready ? (is_host ? data_state  : data_paddle) : SYNC_BYTE;
 
     send_state_frame u_send_state_frame(
         .clk(clk_65Mhz),
         .rst_n,
         .flag_char(flag_char),
         .ref_time(ref_time),
-        .tx_full(is_host ? tx_full : 1'b1),
+        .tx_full(link_ready && is_host ? tx_full : 1'b1),
         .paddle_1_y(paddle1_y),
         .paddle_2_y(paddle2_y),
         .ball_x(ball_x),
@@ -306,7 +376,7 @@ module top_vga (
         .rst_n,
         .flag_char(flag_char),
         .ref_time(ref_time),
-        .tx_full(is_host ? 1'b1 : tx_full),
+        .tx_full(link_ready && !is_host ? tx_full : 1'b1),
         .paddle_y(paddle_own_y),
         .data_out(data_paddle),
         .wr_en(wr_en_paddle)
@@ -315,15 +385,17 @@ module top_vga (
     /**
      * UART RX mux: the decoder NOT matching our own role is told the
      * FIFO is always empty, so it never asserts rd_en and never
-     * consumes a byte meant for the other decoder.
+     * consumes a byte meant for the other decoder. Both stay parked
+     * until link_ready - the sync handshake above owns the FIFO's read
+     * side before that.
      */
-    assign rd_uart = is_host ? rd_en_paddle : rd_en_state;
+    assign rd_uart = link_ready ? (is_host ? rd_en_paddle : rd_en_state) : sync_rd_en;
 
     receive_state_frame u_receive_state_frame(
         .clk(clk_65Mhz),
         .rst_n,
         .data_in(r_data),
-        .rx_empty(is_host ? 1'b1 : rx_empty),
+        .rx_empty(link_ready && !is_host ? rx_empty : 1'b1),
         .rd_en(rd_en_state),
         .paddle_1_y(paddle1_rx),
         .paddle_2_y(paddle2_rx),
@@ -341,7 +413,7 @@ module top_vga (
         .clk(clk_65Mhz),
         .rst_n,
         .data_in(r_data),
-        .rx_empty(is_host ? rx_empty : 1'b1),
+        .rx_empty(link_ready && is_host ? rx_empty : 1'b1),
         .rd_en(rd_en_paddle),
         .paddle_y(paddle_peer_rx),
         .peer_flag_char(client_flag_rx),
@@ -407,7 +479,7 @@ module top_vga (
         end
     end
 
-    assign led = {resync_hit_led, header_seen_led, tx_heartbeat,
+    assign led = {link_ready, resync_hit_led, header_seen_led, tx_heartbeat,
                   is_host, peer_state, frame_valid_counter[5]};
 
 endmodule
