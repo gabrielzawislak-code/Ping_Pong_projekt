@@ -37,6 +37,18 @@
  * not-yet-updated terminator byte instead of a fresh one, and (whether
  * or not it happened to match a header) always re-popped on top of it,
  * shifting every later frame boundary by one byte, permanently.
+ *
+ * RESYNC: if BYTE_3 sees anything other than the 0xAA terminator, the
+ * most likely explanation is that header-hunting locked onto the wrong
+ * byte in the first place - any payload byte can, by chance, share the
+ * header's upper nibble (data_in[7:4]==4'hB), which is exactly what can
+ * happen if this board starts listening mid-frame (e.g. the two boards
+ * power up a moment apart). Since every frame is the same fixed length,
+ * simply going back to BYTE_0 after a failure re-counts from the same
+ * wrong phase and fails identically forever - a bad terminator routes
+ * through RESYNC instead, which eats one extra byte before resuming
+ * header-hunt. That shifts the phase by one, so within at most one
+ * frame's worth of failures the true frame boundary lines up.
  */
 module receive_paddle_frame(
     input logic clk,
@@ -61,7 +73,8 @@ module receive_paddle_frame(
         WAIT,
         BYTE_1,
         BYTE_2,
-        BYTE_3
+        BYTE_3,
+        RESYNC
     } state, state_nxt;
 
     always_ff @(posedge clk, negedge rst_n) begin
@@ -143,15 +156,29 @@ module receive_paddle_frame(
             BYTE_3: begin
                 if(!rx_empty) begin
                     rd_en_nxt = 1'b1;
+                    counter_nxt = 2'd0;
 
                     if(data_in == 8'hAA) begin
                         paddle_y_nxt = temp_paddle;
                         peer_flag_char_nxt = temp_flag;
+                        // Through WAIT like every other byte transition,
+                        // instead of jumping straight back to BYTE_0.
+                        state_nxt = WAIT;
                     end
-                    // Through WAIT like every other byte transition,
-                    // instead of jumping straight back to BYTE_0.
-                    counter_nxt = 2'd0;
+                    else begin
+                        // Bad terminator - see RESYNC above.
+                        state_nxt = RESYNC;
+                    end
+                end
+            end
+
+            RESYNC: begin
+                if(!rx_empty) begin
+                    rd_en_nxt = 1'b1;
                     state_nxt = WAIT;
+                end
+                else begin
+                    state_nxt = RESYNC;
                 end
             end
 

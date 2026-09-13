@@ -35,6 +35,19 @@
  * sending real frames - so flag_char (and with it peer_state on the
  * other board's game_fsm) is only updated once TERM confirms the whole
  * frame is genuinely valid, exactly like the game-state fields.
+ *
+ * RESYNC: if TERM's check fails (bad terminator, or an uncorrectable
+ * 2+ bit error), the most likely explanation is that header-hunting
+ * locked onto the wrong byte in the first place - any payload byte can, by
+ * chance, share the header's upper nibble (data_in[7:4]==4'hA), which is
+ * exactly what can happen if this board starts listening mid-frame
+ * (e.g. the two boards power up a moment apart). Since every frame is
+ * the same fixed length, simply going back to BYTE_0 after a failure
+ * re-counts from the same wrong phase and fails identically forever -
+ * TERM routes a failure through RESYNC instead, which eats one extra
+ * byte before resuming header-hunt. That shifts the phase by one, so
+ * within at most one frame's worth of failures the true frame boundary
+ * is guaranteed to line up.
  */
 module receive_state_frame(
     input logic clk,
@@ -81,7 +94,8 @@ module receive_state_frame(
         BYTE_9,
         BYTE_10,
         PARITY,
-        TERM
+        TERM,
+        RESYNC
     } state, state_nxt;
 
     always_ff @(posedge clk, negedge rst_n) begin
@@ -342,28 +356,39 @@ module receive_state_frame(
             TERM: begin
                 if(!rx_empty) begin
                     rd_en_nxt = 1;
-
-                    if(data_in == 8'hAA) begin
-                        if(decoded[81:80] != 2'd2) begin
-                            paddle_1_y_nxt = {decoded[74:72], decoded[71:64]};
-                            paddle_2_y_nxt = {decoded[58:56], decoded[55:48]};
-                            ball_x_nxt = {decoded[42:40], decoded[39:32]};
-                            ball_y_nxt = {decoded[26:24], decoded[23:16]};
-                            score_1_nxt = decoded[11:8];
-                            score_2_nxt = decoded[3:0];
-                            flag_char_nxt = pending_flag;
-                        end
-                        // decoded[81:80] == 2 (uncorrectable, 2+ flipped
-                        // bits): frame dropped, previous state keeps
-                        // showing until the next good frame arrives.
-                    end
-                    // Go through WAIT like every other byte transition,
-                    // instead of jumping straight back to BYTE_0.
                     counter_nxt = 0;
-                    state_nxt = WAIT;
+
+                    if(data_in == 8'hAA && decoded[81:80] != 2'd2) begin
+                        paddle_1_y_nxt = {decoded[74:72], decoded[71:64]};
+                        paddle_2_y_nxt = {decoded[58:56], decoded[55:48]};
+                        ball_x_nxt = {decoded[42:40], decoded[39:32]};
+                        ball_y_nxt = {decoded[26:24], decoded[23:16]};
+                        score_1_nxt = decoded[11:8];
+                        score_2_nxt = decoded[3:0];
+                        flag_char_nxt = pending_flag;
+                        // Frame lined up and checked out - resume
+                        // header-hunting from a fresh byte, same as
+                        // every other byte transition.
+                        state_nxt = WAIT;
+                    end
+                    else begin
+                        // Bad terminator, or 2+ bit errors Hamming
+                        // couldn't fix - see RESYNC above.
+                        state_nxt = RESYNC;
+                    end
                 end
                 else begin
                     state_nxt = TERM;
+                end
+            end
+
+            RESYNC: begin
+                if(!rx_empty) begin
+                    rd_en_nxt = 1;
+                    state_nxt = WAIT;
+                end
+                else begin
+                    state_nxt = RESYNC;
                 end
             end
 
