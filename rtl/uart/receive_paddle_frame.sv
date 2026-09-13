@@ -18,6 +18,15 @@
  * the new byte is only visible on r_data the cycle after) before the
  * next BYTE_x state samples data_in - skipping that settle cycle would
  * make every field read the previous byte instead of its own.
+ *
+ * peer_flag_char is buffered the same way paddle_y already was: BYTE_0
+ * only stashes the header's flag bits into temp_flag, it is not
+ * committed to peer_flag_char until BYTE_3 confirms the 0xAA terminator.
+ * A bare header-nibble match (data_in[7:4]==4'hB) is weak on its own -
+ * about 1 in 16 for a stray/noise byte, which is exactly the kind of
+ * thing that can show up on the link before both boards are sending
+ * real frames - so committing on the header alone risked the peer
+ * looking "ready" before it actually was.
  */
 module receive_paddle_frame(
     input logic clk,
@@ -32,6 +41,7 @@ module receive_paddle_frame(
     localparam logic [2:0] FLAG_IDLE = 3'b001;
 
     logic [10:0] temp_paddle, temp_paddle_nxt, paddle_y_nxt;
+    logic [2:0] temp_flag, temp_flag_nxt;
     logic [2:0] peer_flag_char_nxt;
     logic rd_en_nxt;
     logic [1:0] counter, counter_nxt;
@@ -48,6 +58,7 @@ module receive_paddle_frame(
         if(!rst_n) begin
             paddle_y <= 334;
             temp_paddle <= 334;
+            temp_flag <= FLAG_IDLE;
             peer_flag_char <= FLAG_IDLE;
             rd_en <= 1'b0;
             counter <= '0;
@@ -56,6 +67,7 @@ module receive_paddle_frame(
         else begin
             paddle_y <= paddle_y_nxt;
             temp_paddle <= temp_paddle_nxt;
+            temp_flag <= temp_flag_nxt;
             peer_flag_char <= peer_flag_char_nxt;
             rd_en <= rd_en_nxt;
             counter <= counter_nxt;
@@ -66,6 +78,7 @@ module receive_paddle_frame(
     always_comb begin
         temp_paddle_nxt = temp_paddle;
         paddle_y_nxt = paddle_y;
+        temp_flag_nxt = temp_flag;
         peer_flag_char_nxt = peer_flag_char;
         rd_en_nxt = 1'b0;
         counter_nxt = counter;
@@ -77,7 +90,7 @@ module receive_paddle_frame(
                     rd_en_nxt = 1'b1;
 
                     if(data_in[7:4] == 4'hB) begin
-                        peer_flag_char_nxt = data_in[2:0];
+                        temp_flag_nxt = data_in[2:0];
                         counter_nxt = 2'd1;
                         state_nxt = WAIT;
                     end
@@ -123,6 +136,7 @@ module receive_paddle_frame(
 
                     if(data_in == 8'hAA) begin
                         paddle_y_nxt = temp_paddle;
+                        peer_flag_char_nxt = temp_flag;
                     end
                     state_nxt = BYTE_0;
                 end

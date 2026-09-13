@@ -26,6 +26,15 @@
  * the terminator matches AND the payload was clean or a single flipped
  * bit could be corrected - a frame with two or more flipped bits is
  * dropped instead of being displayed as garbage.
+ *
+ * flag_char (the peer's game_fsm state - IDLE/READY/PLAYING/END) works
+ * the same way: BYTE_0 only buffers the header's flag bits into
+ * pending_flag, it does not touch flag_char itself. A bare header-nibble
+ * match (data_in[7:4]==4'hA) is a weak check on its own - about 1 in 16
+ * for a stray/noise byte, e.g. on link power-up before both boards are
+ * sending real frames - so flag_char (and with it peer_state on the
+ * other board's game_fsm) is only updated once TERM confirms the whole
+ * frame is genuinely valid, exactly like the game-state fields.
  */
 module receive_state_frame(
     input logic clk,
@@ -52,6 +61,7 @@ module receive_state_frame(
     logic [79:0] raw_payload, raw_payload_nxt;
     logic [7:0] parity_byte, parity_byte_nxt;
     logic [81:0] decoded; // {status[1:0], corrected raw_payload[79:0]}
+    logic [2:0] pending_flag, pending_flag_nxt;
 
     logic [2:0] flag_char_nxt;
     logic rd_en_nxt;
@@ -85,6 +95,7 @@ module receive_state_frame(
 
            raw_payload <= '0;
            parity_byte <= '0;
+           pending_flag <= FLAG_IDLE;
 
            flag_char <= FLAG_IDLE;
            rd_en <= 0;
@@ -101,6 +112,7 @@ module receive_state_frame(
 
             raw_payload <= raw_payload_nxt;
             parity_byte <= parity_byte_nxt;
+            pending_flag <= pending_flag_nxt;
 
             flag_char <= flag_char_nxt;
             rd_en <= rd_en_nxt;
@@ -119,6 +131,7 @@ module receive_state_frame(
 
         raw_payload_nxt = raw_payload;
         parity_byte_nxt = parity_byte;
+        pending_flag_nxt = pending_flag;
 
         rd_en_nxt = 0;
         flag_char_nxt = flag_char;
@@ -131,7 +144,12 @@ module receive_state_frame(
                     rd_en_nxt = 1;
 
                     if(data_in[7:4] == 4'hA) begin
-                        flag_char_nxt = data_in[2:0];
+                        // Buffered, not committed to flag_char yet - a
+                        // bare header-nibble match is weak on its own
+                        // (1 in 16 for random noise); only trust it once
+                        // TERM confirms the whole frame, same as every
+                        // other field.
+                        pending_flag_nxt = data_in[2:0];
                         counter_nxt = 1;
                         state_nxt = WAIT;
                     end
@@ -333,6 +351,7 @@ module receive_state_frame(
                             ball_y_nxt = {decoded[26:24], decoded[23:16]};
                             score_1_nxt = decoded[11:8];
                             score_2_nxt = decoded[3:0];
+                            flag_char_nxt = pending_flag;
                         end
                         // decoded[81:80] == 2 (uncorrectable, 2+ flipped
                         // bits): frame dropped, previous state keeps
