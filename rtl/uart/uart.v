@@ -8,10 +8,11 @@ module uart
       // powered Basys3 boards (no termination, no level-matched grounds
       // beyond a single shared GND wire) - halving the baud rate doubles
       // the time budget per bit, which is the standard first response to
-      // marginal signal integrity on a link like this. The 12-byte
-      // HOST->CLIENT frame still comfortably fits in the ~60 Hz tick
-      // budget: 12 bytes * 10 bits / 9600 baud =~ 12.5 ms, versus a
-      // ~16.7 ms period between frames.
+      // marginal signal integrity on a link like this. The 13-byte
+      // HOST->CLIENT frame (12 data/framing bytes plus a Hamming parity
+      // byte, see hamming_secded.sv) still comfortably fits in the
+      // ~60 Hz tick budget: 13 bytes * 10 bits / 9600 baud =~ 13.5 ms,
+      // versus a ~16.7 ms period between frames.
       parameter DBIT = 8,     // # data bits
                 SB_TICK = 16, // # ticks for stop bits, 16/24/32
                               // for 1/1.5/2 stop bits
