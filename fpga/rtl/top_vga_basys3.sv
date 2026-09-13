@@ -40,7 +40,8 @@ module top_vga_basys3 (
         output wire [3:0] vgaRed,
         output wire [3:0] vgaGreen,
         output wire [3:0] vgaBlue,
-        output wire JA1
+        output wire JA1,
+        output wire [4:0] led
     );
 
     timeunit 1ns;
@@ -160,7 +161,8 @@ module top_vga_basys3 (
         .g(vgaGreen),
         .b(vgaBlue),
         .hs(Hsync),
-        .vs(Vsync)
+        .vs(Vsync),
+        .led(led)
     );
 
 endmodule

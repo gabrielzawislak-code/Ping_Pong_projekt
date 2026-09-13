@@ -61,7 +61,8 @@ module receive_state_frame(
     output logic [10:0] ball_y,
     output logic [3:0] score_1,
     output logic [3:0] score_2,
-    output logic [2:0] flag_char
+    output logic [2:0] flag_char,
+    output logic frame_valid // 1-cycle pulse: a whole frame just checked out and was committed
 );
 
     import hamming_secded_pkg::*;
@@ -78,6 +79,7 @@ module receive_state_frame(
 
     logic [2:0] flag_char_nxt;
     logic rd_en_nxt;
+    logic frame_valid_nxt;
     logic [3:0] counter, counter_nxt;
 
     enum logic [3:0] {
@@ -113,6 +115,7 @@ module receive_state_frame(
 
            flag_char <= FLAG_IDLE;
            rd_en <= 0;
+           frame_valid <= 0;
            counter <= '0;
            state <= BYTE_0;
         end
@@ -130,6 +133,7 @@ module receive_state_frame(
 
             flag_char <= flag_char_nxt;
             rd_en <= rd_en_nxt;
+            frame_valid <= frame_valid_nxt;
             counter <= counter_nxt;
             state <= state_nxt;
         end
@@ -149,6 +153,7 @@ module receive_state_frame(
 
         rd_en_nxt = 0;
         flag_char_nxt = flag_char;
+        frame_valid_nxt = 0;
         counter_nxt = counter;
         decoded = hamming_decode(raw_payload, parity_byte);
 
@@ -366,6 +371,7 @@ module receive_state_frame(
                         score_1_nxt = decoded[11:8];
                         score_2_nxt = decoded[3:0];
                         flag_char_nxt = pending_flag;
+                        frame_valid_nxt = 1;
                         // Frame lined up and checked out - resume
                         // header-hunting from a fresh byte, same as
                         // every other byte transition.

@@ -57,7 +57,8 @@ module receive_paddle_frame(
     input logic rx_empty,
     output logic rd_en,
     output logic [10:0] paddle_y,
-    output logic [2:0] peer_flag_char
+    output logic [2:0] peer_flag_char,
+    output logic frame_valid // 1-cycle pulse: a whole frame just checked out and was committed
 );
 
     localparam logic [2:0] FLAG_IDLE = 3'b001;
@@ -66,6 +67,7 @@ module receive_paddle_frame(
     logic [2:0] temp_flag, temp_flag_nxt;
     logic [2:0] peer_flag_char_nxt;
     logic rd_en_nxt;
+    logic frame_valid_nxt;
     logic [1:0] counter, counter_nxt;
 
     enum logic [2:0] {
@@ -84,6 +86,7 @@ module receive_paddle_frame(
             temp_flag <= FLAG_IDLE;
             peer_flag_char <= FLAG_IDLE;
             rd_en <= 1'b0;
+            frame_valid <= 1'b0;
             counter <= '0;
             state <= BYTE_0;
         end
@@ -93,6 +96,7 @@ module receive_paddle_frame(
             temp_flag <= temp_flag_nxt;
             peer_flag_char <= peer_flag_char_nxt;
             rd_en <= rd_en_nxt;
+            frame_valid <= frame_valid_nxt;
             counter <= counter_nxt;
             state <= state_nxt;
         end
@@ -104,6 +108,7 @@ module receive_paddle_frame(
         temp_flag_nxt = temp_flag;
         peer_flag_char_nxt = peer_flag_char;
         rd_en_nxt = 1'b0;
+        frame_valid_nxt = 1'b0;
         counter_nxt = counter;
         state_nxt = state;
 
@@ -161,6 +166,7 @@ module receive_paddle_frame(
                     if(data_in == 8'hAA) begin
                         paddle_y_nxt = temp_paddle;
                         peer_flag_char_nxt = temp_flag;
+                        frame_valid_nxt = 1'b1;
                         // Through WAIT like every other byte transition,
                         // instead of jumping straight back to BYTE_0.
                         state_nxt = WAIT;

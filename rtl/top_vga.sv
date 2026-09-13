@@ -44,7 +44,13 @@ module top_vga (
         output logic hs,
         output logic [3:0] r,
         output logic [3:0] g,
-        output logic [3:0] b
+        output logic [3:0] b,
+        // Debug: led[4]=is_host, led[3:1]=peer_state, led[0]=heartbeat -
+        // blinks whenever a valid frame from the peer is being received.
+        // If led[0] never lights up, nothing from the peer is getting
+        // through at all (which looks identical on screen to a peer
+        // that is idly reporting IDLE - see receive_state_frame.sv).
+        output logic [4:0] led
     );
 
     timeunit 1ns;
@@ -88,6 +94,25 @@ module top_vga (
     logic        rd_en_state, rd_en_paddle;
 
     logic [2:0] peer_state;
+
+    // Debug heartbeat: pulses whenever this board's active receiver (the
+    // one matching its own role) commits a fresh, validated frame from
+    // the peer - see led[0] above.
+    logic frame_valid_state, frame_valid_paddle, frame_valid;
+    logic [5:0] frame_valid_counter;
+
+    assign frame_valid = is_host ? frame_valid_paddle : frame_valid_state;
+
+    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
+        if(!rst_n) begin
+            frame_valid_counter <= '0;
+        end
+        else if(frame_valid) begin
+            frame_valid_counter <= frame_valid_counter + 1;
+        end
+    end
+
+    assign led = {is_host, peer_state, frame_valid_counter[5]};
 
     /**
      * Signals assignments
@@ -308,7 +333,8 @@ module top_vga (
         .ball_y(ball_y_rx),
         .score_1(score_1_rx),
         .score_2(score_2_rx),
-        .flag_char(host_flag_rx)
+        .flag_char(host_flag_rx),
+        .frame_valid(frame_valid_state)
     );
 
     receive_paddle_frame u_receive_paddle_frame(
@@ -318,7 +344,8 @@ module top_vga (
         .rx_empty(is_host ? rx_empty : 1'b1),
         .rd_en(rd_en_paddle),
         .paddle_y(paddle_peer_rx),
-        .peer_flag_char(client_flag_rx)
+        .peer_flag_char(client_flag_rx),
+        .frame_valid(frame_valid_paddle)
     );
 
     uart u_uart(
