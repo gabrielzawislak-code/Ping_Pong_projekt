@@ -84,3 +84,56 @@ Projekt zbudowany w Vivado 2025.2:
     ogólnego szumu narzędzia (skan katalogu płytek referencyjnych) oraz
     typowego, nieszkodliwego advisory o BRAM/async reset w
     niezmienionym module font_rom.sv.
+
+
+5. ZNANY, NIEROZWIĄZANY DO TERMINU PROBLEM
+---------------------------------------------
+Co działa poprawnie i jest zweryfikowane na sprzęcie:
+  - Uzgadnianie stanu gry (IDLE/READY/PLAYING/END) między płytkami -
+    niezawodne w obie strony.
+  - HOST: pełna rozgrywka działa bez zarzutu - własna fizyka piłki,
+    własna paletka, a paletka CLIENTa (odbierana 4-bajtową ramką
+    CLIENT -> HOST) porusza się poprawnie.
+  - CLIENT: własna paletka (sterowana lokalnie, bez UART) rusza się
+    poprawnie.
+  - Sama logika dekodowania 12-bajtowej ramki HOST -> CLIENT jest
+    poprawna - potwierdzone dwukrotnie: diodowy wskaźnik diagnostyczny
+    (zliczający udane dopasowania bajtu kończącego ramkę) zaświecił się,
+    a po ręcznym, jednorazowym zresetowaniu łącza obie płytki pokazały
+    wynik 9:3 oraz identyczne pozycje paletek na obu ekranach jednocześnie.
+
+Co nie działa:
+  - W ciągłej, nieprzerywanej pracy CLIENT praktycznie nie aktualizuje
+    obrazu piłki, paletki HOSTa ani wyniku - ekran zostaje zamrożony na
+    wartościach początkowych. Jedynym sposobem na wymuszenie pojedynczej,
+    poprawnej aktualizacji jest ręczne przełączenie roli (sw_role) na
+    płytce HOSTa (HOST -> CLIENT -> z powrotem HOST) w trakcie działania -
+    po czym znów następuje zamrożenie do kolejnego takiego przełączenia.
+
+Co wykluczyliśmy jako przyczynę (metodą prób):
+  - Uszkodzony/luźny przewód między płytkami - zamiana przewodów na inne
+    fizycznie nie zmieniła objawów.
+  - Luźny styk w gnieździe Pmod - dociskanie/poruszanie wtyczek podczas
+    pracy nie dało efektu (w przeciwieństwie do przełącznika roli).
+  - Zbyt mała głębokość FIFO UART - zwiększenie z 4 do 16 słów bez
+    zmiany zachowania.
+  - Zbyt wysoka prędkość transmisji / zbyt mały margines czasowy na bit -
+    zmniejszenie prędkości UART z ~19200 na ~9600 baud bez zmiany
+    zachowania.
+  - Automatyczne, cykliczne wymuszanie restartu maszyn stanów nadawania
+    i odbioru (próba odtworzenia efektu ręcznego przełączenia w sposób
+    ciągły, co ~200 ms) - wycofane, bo pogorszyło sytuację (CLIENT
+    przestał się aktualizować w ogóle, nawet przy ręcznym przełączaniu).
+
+Prawdopodobna przyczyna: coś w module send_state_frame.sv (nadajnik
+12-bajtowej ramki po stronie HOSTa) lub w jego interakcji z fizycznym
+nadajnikiem UART "zawiesza się" podczas długotrwałej, nieprzerywanej
+pracy w sposób, którego nie udało się jednoznacznie zlokalizować samą
+analizą kodu (bez dostępu do symulatora/analizatora stanów logicznych
+na żywym łączu) w czasie dostępnym przed terminem oddania. To, że akurat
+przełącznik roli HOSTa (a nie CLIENTa) odblokowuje transfer, wskazuje na
+stronę nadawczą jako najbardziej prawdopodobne miejsce błędu.
+
+Obejście stosowane do celów demonstracji: ręczne przełączenie sw_role na
+płytce HOSTa (HOST -> CLIENT -> HOST) w trakcie rozgrywki wymusza jedną,
+poprawną aktualizację ekranu CLIENTa.
