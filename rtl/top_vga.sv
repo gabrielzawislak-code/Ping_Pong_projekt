@@ -45,12 +45,23 @@ module top_vga (
         output logic [3:0] r,
         output logic [3:0] g,
         output logic [3:0] b,
-        // Debug: led[4]=is_host, led[3:1]=peer_state, led[0]=heartbeat -
-        // blinks whenever a valid frame from the peer is being received.
-        // If led[0] never lights up, nothing from the peer is getting
-        // through at all (which looks identical on screen to a peer
-        // that is idly reporting IDLE - see receive_state_frame.sv).
-        output logic [4:0] led
+        // Debug (state-frame receiver only - the one that has been
+        // acting up):
+        //   led[7] = resync_hit  - toggles every time a frame attempt
+        //            failed and RESYNC kicked in (see receive_state_frame.sv)
+        //   led[6] = header_seen - toggles every time BYTE_0 locks onto
+        //            ANY candidate header byte, true or false
+        //   led[5] = TX heartbeat - toggles on every byte this board
+        //            writes to its own UART TX FIFO (is it sending at all)
+        //   led[4] = is_host
+        //   led[3:1] = peer_state (001 IDLE, 010 READY, 011 PLAYING, 100 END)
+        //   led[0] = RX heartbeat - blinks whenever a valid frame from
+        //            the peer is committed
+        // led[0] dark but led[6]/led[7] active means frames ARE being
+        // attempted and failing/resyncing, not that nothing arrives at
+        // all; everything dark (led[6],[7] included) means nothing with
+        // a header-shaped byte is reaching this board's receiver, ever.
+        output logic [7:0] led
     );
 
     timeunit 1ns;
@@ -95,24 +106,11 @@ module top_vga (
 
     logic [2:0] peer_state;
 
-    // Debug heartbeat: pulses whenever this board's active receiver (the
-    // one matching its own role) commits a fresh, validated frame from
-    // the peer - see led[0] above.
+    // Debug signals from the state-frame receiver - wired to led[7:5] at
+    // the bottom of this file, once wr_uart and every instance below
+    // actually exist.
     logic frame_valid_state, frame_valid_paddle, frame_valid;
-    logic [5:0] frame_valid_counter;
-
-    assign frame_valid = is_host ? frame_valid_paddle : frame_valid_state;
-
-    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
-        if(!rst_n) begin
-            frame_valid_counter <= '0;
-        end
-        else if(frame_valid) begin
-            frame_valid_counter <= frame_valid_counter + 1;
-        end
-    end
-
-    assign led = {is_host, peer_state, frame_valid_counter[5]};
+    logic header_seen, resync_hit;
 
     /**
      * Signals assignments
@@ -334,7 +332,9 @@ module top_vga (
         .score_1(score_1_rx),
         .score_2(score_2_rx),
         .flag_char(host_flag_rx),
-        .frame_valid(frame_valid_state)
+        .frame_valid(frame_valid_state),
+        .header_seen(header_seen),
+        .resync_hit(resync_hit)
     );
 
     receive_paddle_frame u_receive_paddle_frame(
@@ -372,5 +372,42 @@ module top_vga (
     // tx originates in our own clock domain already - no need to
     // synchronize it before driving the physical output pin.
     assign tx_pin = tx;
+
+    /**
+     * Debug LEDs - see the port declaration comment above for what each
+     * bit means. led[7:5] toggle once per event (rather than dividing a
+     * counter down) so both fast, continuous activity and rare, one-off
+     * events stay visible.
+     */
+    assign frame_valid = is_host ? frame_valid_paddle : frame_valid_state;
+
+    logic [5:0] frame_valid_counter;
+    logic tx_heartbeat, header_seen_led, resync_hit_led;
+
+    always_ff @(posedge clk_65Mhz, negedge rst_n) begin
+        if(!rst_n) begin
+            frame_valid_counter <= '0;
+            tx_heartbeat <= 1'b0;
+            header_seen_led <= 1'b0;
+            resync_hit_led <= 1'b0;
+        end
+        else begin
+            if(frame_valid) begin
+                frame_valid_counter <= frame_valid_counter + 1;
+            end
+            if(wr_uart) begin
+                tx_heartbeat <= ~tx_heartbeat;
+            end
+            if(header_seen) begin
+                header_seen_led <= ~header_seen_led;
+            end
+            if(resync_hit) begin
+                resync_hit_led <= ~resync_hit_led;
+            end
+        end
+    end
+
+    assign led = {resync_hit_led, header_seen_led, tx_heartbeat,
+                  is_host, peer_state, frame_valid_counter[5]};
 
 endmodule
